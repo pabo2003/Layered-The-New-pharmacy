@@ -1,16 +1,16 @@
-package lk.ijse.gdse.DAO;
+package lk.ijse.gdse.DAO.Impl;
 
 import lk.ijse.gdse.DAO.Impl.ItemDAOImpl;
 import lk.ijse.gdse.DAO.Impl.OrderDAOImpl;
+import lk.ijse.gdse.DAO.Impl.OrderDetailDAOImpl;
 import lk.ijse.gdse.DAO.Impl.PaymentDAOImpl;
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.DTO.PlaceOrderDTO;
-import lk.ijse.gdse.Entity.PlaceOrder;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class PlaceOrderRepo {
+public class PlaceOrderDAOImpl {
     public static boolean placeOrder(PlaceOrderDTO po) throws SQLException {
         Connection connection = DbConnection.getInstance().getConnection();
         connection.setAutoCommit(false);
@@ -22,7 +22,7 @@ public class PlaceOrderRepo {
                 if (isOrderSaved) {
                     boolean isQtyUpdated = ItemDAOImpl.update1(po.getOdList());
                     if (isQtyUpdated) {
-                        boolean isOrderDetailSaved = OrderDetailRepo.save(po.getOdList());
+                        boolean isOrderDetailSaved = OrderDetailDAOImpl.save(po.getOdList());
                         if (isOrderDetailSaved) {
 
                             connection.commit();

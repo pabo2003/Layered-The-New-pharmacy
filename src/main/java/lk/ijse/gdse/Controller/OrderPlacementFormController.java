@@ -18,13 +18,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import lk.ijse.gdse.BO.BOFactory;
 import lk.ijse.gdse.BO.CustomerBO;
-import lk.ijse.gdse.DAO.Impl.EmployeeDAOImpl;
-import lk.ijse.gdse.DAO.Impl.ItemDAOImpl;
-import lk.ijse.gdse.DAO.Impl.OrderDAOImpl;
-import lk.ijse.gdse.DAO.Impl.PaymentDAOImpl;
+import lk.ijse.gdse.DAO.Impl.*;
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.Entity.*;
-import lk.ijse.gdse.DAO.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -359,7 +355,7 @@ public class OrderPlacementFormController {
         Payment payment = new Payment(paymentID,PayMethod,Amount, date);
         PlaceOrder po = new PlaceOrder(order, odList, payment);
 
-        boolean isPlaced = PlaceOrderRepo.placeOrder(po);
+        boolean isPlaced = PlaceOrderDAOImpl.placeOrder(po);
         if (isPlaced) {
             btnPrintBillOnAction(null);
             obList.clear();

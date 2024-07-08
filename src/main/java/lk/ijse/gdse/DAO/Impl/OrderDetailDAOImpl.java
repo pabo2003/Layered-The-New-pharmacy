@@ -1,4 +1,4 @@
-package lk.ijse.gdse.DAO;
+package lk.ijse.gdse.DAO.Impl;
 
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.Entity.OrderDetails;
@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
-public class OrderDetailRepo {
+public class OrderDetailDAOImpl {
     public static boolean save(List<OrderDetails> odList) throws SQLException {
         for (OrderDetails od : odList) {
             boolean isSaved = saveOrderDetail(od);

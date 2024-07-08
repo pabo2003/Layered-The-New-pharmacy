@@ -1,7 +1,9 @@
 package lk.ijse.gdse.DAO.Impl;
 
 
+import lk.ijse.gdse.DAO.SQLUtil;
 import lk.ijse.gdse.DB.DbConnection;
+import lk.ijse.gdse.Entity.Customer;
 import lk.ijse.gdse.Entity.Supplier;
 
 import java.sql.Connection;
@@ -13,7 +15,7 @@ import java.util.List;
 
 public class SupplierDAOImpl {
     public static boolean save(Supplier supplier) throws SQLException {
-        String sql = "INSERT INTO supplier VALUES(?,?,?,?,?)";
+        /*String sql = "INSERT INTO supplier VALUES(?,?,?,?,?)";
         Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement(sql);
 
@@ -23,11 +25,12 @@ public class SupplierDAOImpl {
         pstm.setObject(4, supplier.getAddress());
         pstm.setObject(5, supplier.getTel());
 
-        return pstm.executeUpdate() > 0;
+        return pstm.executeUpdate() > 0;*/
+        return SQLUtil.execute("INSERT INTO supplier VALUES(?,?,?,?,?)",supplier.getSupplierId(),supplier.getName(),supplier.getDescription(),supplier.getAddress(),supplier.getTel());
     }
 
     public static List<Supplier> getAll() throws SQLException {
-        String sql = "SELECT*FROM supplier";
+        /*String sql = "SELECT*FROM supplier";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         ResultSet resultSet = pstm.executeQuery();
@@ -44,20 +47,34 @@ public class SupplierDAOImpl {
             Supplier supplier = new Supplier(id, name, description, address, tel);
             supplierList.add(supplier);
         }
-        return supplierList;
+        return supplierList;*/
+        ArrayList<Supplier> suppliers = new ArrayList<>();
+        ResultSet rst = SQLUtil.execute("SELECT*FROM supplier");
+        while (rst.next()){
+            Supplier supplier = new Supplier(
+                    rst.getString(1),
+                    rst.getString(2),
+                    rst.getString(3),
+                    rst.getString(4),
+                    rst.getString(5)
+            );
+            suppliers.add(supplier);
+        }
+        return suppliers;
     }
 
     public static boolean delete(String id) throws SQLException {
-        String sql = "DELETE FROM supplier WHERE supplierId = ?";
+        /*String sql = "DELETE FROM supplier WHERE supplierId = ?";
 
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
         pstm.setObject(1, id);
 
-        return pstm.executeUpdate() > 0;
+        return pstm.executeUpdate() > 0;*/
+        return SQLUtil.execute("DELETE FROM supplier WHERE supplierId = ?",id);
     }
 
     public static boolean update(Supplier supplier) throws SQLException {
-        String sql = "UPDATE supplier SET name = ? , description = ? , address = ? , tel = ? WHERE supplierId = ?";
+        /*String sql = "UPDATE supplier SET name = ? , description = ? , address = ? , tel = ? WHERE supplierId = ?";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         pstm.setObject(1, supplier.getName());
@@ -66,11 +83,12 @@ public class SupplierDAOImpl {
         pstm.setObject(4, supplier.getTel());
         pstm.setObject(5, supplier.getSupplierId());
 
-        return pstm.executeUpdate() > 0;
+        return pstm.executeUpdate() > 0;*/
+        return SQLUtil.execute("UPDATE supplier SET name = ? , description = ? , address = ? , tel = ? WHERE supplierId = ?",supplier.getName(),supplier.getDescription(),supplier.getAddress(),supplier.getTel(),supplier.getSupplierId());
     }
 
     public static Supplier searchById(String id) throws SQLException {
-        String sql = "SELECT*FROM supplier WHERE supplierId = ?";
+        /*String sql = "SELECT*FROM supplier WHERE supplierId = ?";
 
         Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -88,7 +106,8 @@ public class SupplierDAOImpl {
 
             return supplier;
         }
-        return null;
+        return null;*/
+
     }
 
     public static List<String> getId() throws SQLException {
