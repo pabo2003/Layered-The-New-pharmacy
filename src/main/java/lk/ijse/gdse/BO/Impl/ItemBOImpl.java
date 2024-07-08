@@ -40,7 +40,7 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public List<String> getCodes() throws SQLException {
-        return itemDAO.getCodes();
+        return itemDAO.getTel();
     }
 
     @Override

@@ -107,11 +107,13 @@ public class SupplierDAOImpl {
             return supplier;
         }
         return null;*/
-
+        ResultSet rst = SQLUtil.execute("SELECT*FROM supplier WHERE supplierId = ?",id +"");
+        rst.next();
+        return new Supplier(rst.getString(1),rst.getString(2),rst.getString(3),rst.getString(4),rst.getString(5) );
     }
 
     public static List<String> getId() throws SQLException {
-        String sql = "SELECT supplierId from supplier";
+        /*String sql = "SELECT supplierId from supplier";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         ResultSet resultSet = pstm.executeQuery();
@@ -121,12 +123,21 @@ public class SupplierDAOImpl {
             String id = resultSet.getString(1);
             supplierList.add(id);
         }
-        return supplierList;
+        return supplierList;*/
+        List<String> idList = new ArrayList<>();
+
+        try (ResultSet rst = SQLUtil.execute("SELECT supplierId from supplier")) {
+            while (rst.next()) {
+                String id = rst.getString(1);
+                idList.add(id);
+            }
+        }
+        return idList;
     }
 
 
     public static String getCurrentId() throws SQLException {
-        String sql = "SELECT supplierId FROM supplier ORDER BY supplierId DESC LIMIT 1";
+        /*String sql = "SELECT supplierId FROM supplier ORDER BY supplierId DESC LIMIT 1";
         PreparedStatement pstm = DbConnection.getInstance().getConnection()
                 .prepareStatement(sql);
 
@@ -134,6 +145,12 @@ public class SupplierDAOImpl {
         if(resultSet.next()) {
             String customerId = resultSet.getString(1);
             return customerId;
+        }
+        return null;*/
+        ResultSet rst = SQLUtil.execute("SELECT supplierId FROM supplier ORDER BY supplierId DESC LIMIT 1");
+        if(rst.next()) {
+            String id = rst.getString(1);
+            return id;
         }
         return null;
     }

@@ -39,12 +39,12 @@ public class PaymentBOImpl implements PaymentBO {
 
     @Override
     public Payment searchById(String id) throws SQLException {
-        return paymentDAO.searchById(id);
+        return paymentDAO.searchByTel(id);
     }
 
     @Override
     public List<String> getId() throws SQLException {
-        return paymentDAO.getId();
+        return paymentDAO.getTel();
     }
 
     @Override
