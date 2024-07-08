@@ -16,8 +16,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import lk.ijse.gdse.BO.BOFactory;
+import lk.ijse.gdse.BO.CustomerBO;
+import lk.ijse.gdse.DAO.Impl.EmployeeDAOImpl;
+import lk.ijse.gdse.DAO.Impl.ItemDAOImpl;
+import lk.ijse.gdse.DAO.Impl.OrderDAOImpl;
+import lk.ijse.gdse.DAO.Impl.PaymentDAOImpl;
 import lk.ijse.gdse.DB.DbConnection;
-import lk.ijse.gdse.model.*;
+import lk.ijse.gdse.Entity.*;
 import lk.ijse.gdse.DAO.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -123,6 +129,8 @@ public class OrderPlacementFormController {
 
     @FXML
     private Label lblEmployeeId;
+
+    CustomerBO customerBO  = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.CUSTOMER);z
     public void initialize() {
         setDate();
         getCurrentOrderId();
@@ -201,7 +209,7 @@ public class OrderPlacementFormController {
     private void getCurrentOrderId() {
 
         try {
-            String currentId = OrderRepo.getCurrentId();
+            String currentId = OrderDAOImpl.getCurrentId();
             String nextOrderId = generateNextOrderId(currentId);
             lblOrderId.setText(nextOrderId);
 
@@ -219,7 +227,7 @@ public class OrderPlacementFormController {
     }
     private void getCurrentPayId() {
         try {
-            String currentId = PaymentRepo.getPayCurrentId();
+            String currentId = PaymentDAOImpl.getPayCurrentId();
             String nextPayId = generateNextPay(currentId);
             lblPayId.setText(nextPayId);
 
@@ -368,7 +376,7 @@ public class OrderPlacementFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> telList = CustomerDAOImpl.getTel();
+            List<String> telList = customerBO.getTel();
 
             for(String tel : telList) {
                 obList.add(tel);
@@ -384,7 +392,7 @@ public class OrderPlacementFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> telList = EmployeeRepo.getTel();
+            List<String> telList = EmployeeDAOImpl.getTel();
 
             for(String tel : telList) {
                 obList.add(tel);
@@ -400,7 +408,7 @@ public class OrderPlacementFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = ItemRepo.getIds();
+            List<String> idList = ItemDAOImpl.getIds();
 
             for(String id : idList) {
                 obList.add(id);
@@ -416,7 +424,7 @@ public class OrderPlacementFormController {
     void comEmployeeTelOnAction(ActionEvent event) {
         String tel = comEmployeeTel.getValue();
         try {
-            Employee employee = EmployeeRepo.searchByTel(tel);
+            Employee employee = EmployeeDAOImpl.searchByTel(tel);
 
             lblEmployeeName.setText(employee.getName());
             lblEmployeeId.setText(employee.getEmployeeId());
@@ -429,7 +437,7 @@ public class OrderPlacementFormController {
     void comCustomerTelOnAction(ActionEvent event) {
         String tel =  comCustomerTel.getValue();
         try {
-            Customer customer = CustomerDAOImpl.searchByTel(tel);
+            Customer customer = customerBO.searchByTel(tel);
 
             lblCustomerName.setText(customer.getName());
             lblCustomerId.setText(customer.getCuId());
@@ -441,7 +449,7 @@ public class OrderPlacementFormController {
     void comItemIdOnAction(ActionEvent event) {
         String id = String.valueOf(comItemId.getValue());
         try {
-            Item item = ItemRepo.searchById(id);
+            Item item = ItemDAOImpl.searchById(id);
 
             if (item != null) {
                 lblItemDescription.setText(item.getDescription());

@@ -14,12 +14,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import lk.ijse.gdse.model.Stock;
-import lk.ijse.gdse.model.Supplier;
-import lk.ijse.gdse.model.SupplierDetails;
-import lk.ijse.gdse.DAO.StockRepo;
-import lk.ijse.gdse.DAO.SupplierDetailsRepo;
-import lk.ijse.gdse.DAO.SupplierRepo;
+import lk.ijse.gdse.Entity.Stock;
+import lk.ijse.gdse.Entity.Supplier;
+import lk.ijse.gdse.Entity.SupplierDetails;
+import lk.ijse.gdse.DAO.Impl.StockDAOImpl;
+import lk.ijse.gdse.DAO.Impl.SupplierDetailsDAOImpl;
+import lk.ijse.gdse.DAO.Impl.SupplierDAOImpl;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -136,7 +136,7 @@ public class SupplierDetailsFormController {
         ObservableList<Object> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = StockRepo.getId();
+            List<String> idList = StockDAOImpl.getId();
             for(String id : idList) {
                 obList.add(id);
             }
@@ -150,7 +150,7 @@ public class SupplierDetailsFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = SupplierRepo.getId();
+            List<String> idList = SupplierDAOImpl.getId();
 
             for(String id : idList) {
                 obList.add(id);
@@ -166,7 +166,7 @@ public class SupplierDetailsFormController {
     private void loadAllSupplierDetails() {
         ObservableList<SupplierDetails> obList = FXCollections.observableArrayList();
         try {
-            List<SupplierDetails> supplierDetailsList = SupplierDetailsRepo.getAll();
+            List<SupplierDetails> supplierDetailsList = SupplierDetailsDAOImpl.getAll();
             for (SupplierDetails supplierDetails : supplierDetailsList) {
                 SupplierDetails supplierDetails1 = new SupplierDetails();
                 supplierDetails1.setStockId(supplierDetails.getStockId());
@@ -207,7 +207,7 @@ public class SupplierDetailsFormController {
         SupplierDetails supplierDetails = new SupplierDetails(stockId, supplierId, date);
 
         try {
-            boolean isSaved = SupplierDetailsRepo.save(List.of(supplierDetails));
+            boolean isSaved = SupplierDetailsDAOImpl.save(List.of(supplierDetails));
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "SupplierDTO Details saved successfully!").show();
                 clearFields();
@@ -240,7 +240,7 @@ public class SupplierDetailsFormController {
     void comStockIdOnAction(ActionEvent event) {
         String id = (String) comStockId.getValue();
         try {
-            Stock stock = StockRepo.searchById(id);
+            Stock stock = StockDAOImpl.searchById(id);
             lblStockDescription.setText(stock.getDescription());
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -251,7 +251,7 @@ public class SupplierDetailsFormController {
     void comSupplierIdOnAction(ActionEvent event) {
         String id = comSupplierId.getValue();
         try {
-            Supplier supplier = SupplierRepo.searchById(id);
+            Supplier supplier = SupplierDAOImpl.searchById(id);
             lblSupplierName.setText(supplier.getName());
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -1,5 +1,7 @@
 package lk.ijse.gdse.BO;
 
+import lk.ijse.gdse.BO.Impl.CustomerBOImpl;
+
 public class BOFactory {
     private static BOFactory boFactory;
     private BOFactory(){

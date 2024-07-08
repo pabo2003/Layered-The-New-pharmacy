@@ -1,14 +1,15 @@
 package lk.ijse.gdse.BO;
 
-import lk.ijse.gdse.model.Customer;
+import lk.ijse.gdse.DTO.CustomerDTO;
+import lk.ijse.gdse.Entity.Customer;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface CustomerBO extends SuperBO{
-    public boolean saveCustomer(Customer customer) throws SQLException;
+    public  boolean saveCustomer(CustomerDTO customer) throws SQLException;
 
-    public List<Customer> getAllCustomer() throws SQLException;
+    public List<CustomerDTO> getAllCustomer() throws SQLException;
 
     public boolean deleteCustomer(String id) throws SQLException;
 

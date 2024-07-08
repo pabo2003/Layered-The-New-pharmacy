@@ -17,8 +17,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.gdse.Util.Regex;
-import lk.ijse.gdse.model.Stock;
-import lk.ijse.gdse.DAO.StockRepo;
+import lk.ijse.gdse.Entity.Stock;
+import lk.ijse.gdse.DAO.Impl.StockDAOImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -68,7 +68,7 @@ public class StockFormController {
     public void txtSearchOnAction(ActionEvent actionEvent) throws SQLException {
         String id = txtId.getText();
 
-        Stock stock = StockRepo.searchById(id);
+        Stock stock = StockDAOImpl.searchById(id);
 
         if (stock != null) {
             txtId.setText(stock.getStockId());
@@ -110,7 +110,7 @@ public class StockFormController {
 
     private void getCurrentStockId() {
         try {
-            String currentId = StockRepo.getCurrentId();
+            String currentId = StockDAOImpl.getCurrentId();
             String nextOrderId = generateNextStockId(currentId);
             txtId.setText(nextOrderId);
 
@@ -130,7 +130,7 @@ public class StockFormController {
     private void loadAllStock() {
         ObservableList<Stock> objList = FXCollections.observableArrayList();
         try {
-            List<Stock> stockList = StockRepo.getAll();
+            List<Stock> stockList = StockDAOImpl.getAll();
             for (Stock stock : stockList) {
                 Stock stock1 = new Stock(
                         stock.getStockId(),
@@ -174,7 +174,7 @@ public class StockFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = StockRepo.delete(id);
+            boolean isDeleted = StockDAOImpl.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION,"StockDTO Deleted!");
             }
@@ -192,7 +192,7 @@ public class StockFormController {
 
         try {
             if (isValied()) {
-                boolean isSaved = StockRepo.save(new Stock(id, description, category));
+                boolean isSaved = StockDAOImpl.save(new Stock(id, description, category));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "StockDTO saved successfully!").show();
                     clearFields();
@@ -221,7 +221,7 @@ public class StockFormController {
         Stock stock = new Stock(id, description, category);
 
         try {
-            boolean isUpdate = StockRepo.update(stock);
+            boolean isUpdate = StockDAOImpl.update(stock);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION, "StockDTO is updated!").show();
             }

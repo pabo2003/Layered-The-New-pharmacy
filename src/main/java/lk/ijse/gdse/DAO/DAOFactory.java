@@ -1,5 +1,7 @@
 package lk.ijse.gdse.DAO;
 
+import lk.ijse.gdse.DAO.Impl.CustomerDAOImpl;
+
 public class DAOFactory {
     private static DAOFactory daoFactory;
     private DAOFactory(){}

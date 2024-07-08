@@ -1,7 +1,7 @@
 package lk.ijse.gdse.DAO;
 
 import lk.ijse.gdse.DB.DbConnection;
-import lk.ijse.gdse.model.OrderDetails;
+import lk.ijse.gdse.Entity.OrderDetails;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

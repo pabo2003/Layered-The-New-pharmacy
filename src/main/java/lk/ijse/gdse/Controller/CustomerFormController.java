@@ -15,9 +15,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.gdse.BO.BOFactory;
+import lk.ijse.gdse.BO.CustomerBO;
+import lk.ijse.gdse.DTO.CustomerDTO;
 import lk.ijse.gdse.Util.Regex;
-import lk.ijse.gdse.model.Customer;
-import lk.ijse.gdse.DAO.CustomerDAOImpl;
+import lk.ijse.gdse.Entity.Customer;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -48,11 +50,12 @@ public class CustomerFormController {
     private TextField txtNICNo;
     @FXML
     private TextField txtTel;
+    CustomerBO customerBO  = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.CUSTOMER);
 
     public void txtSearchOnAction(ActionEvent actionEvent) throws SQLException {
         String tel = txtId.getText();
 
-        Customer customer = CustomerDAOImpl.searchByTel(tel);
+        Customer customer = customerBO.searchByTel(tel);
 
         if (customer != null) {
             txtId.setText(customer.getCuId());
@@ -106,7 +109,7 @@ public class CustomerFormController {
 
     private void getCurrentCustomerId() {
         try {
-            String currentId = CustomerDAOImpl.getCurrentId();
+            String currentId = customerBO.getCurrentId();
             String nextOrderId = generateNextOrderId(currentId);
             System.out.println(nextOrderId);
             txtId.setText(nextOrderId);
@@ -127,8 +130,8 @@ public class CustomerFormController {
     private void loadAllCustomers() {
         ObservableList<Customer> objList = FXCollections.observableArrayList();
         try {
-            List<Customer> customerList = CustomerDAOImpl.getAll();
-            for (Customer customer : customerList) {
+            List<CustomerDTO> customerList = customerBO.getAllCustomer();
+            for (CustomerDTO customer : customerList) {
                 Customer customer1 = new Customer(
                         customer.getCuId(),
                         customer.getName(),
@@ -161,7 +164,7 @@ public class CustomerFormController {
 
         try {
             if (isValied()) {
-                boolean isSaved = CustomerDAOImpl.save(new Customer(id, name, nicNo, address, tel));
+                boolean isSaved = customerBO.saveCustomer(new CustomerDTO(id, name, nicNo, address, tel));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "CustomerDTO saved successfully!").show();
                     clearFields();
@@ -194,7 +197,7 @@ public class CustomerFormController {
         Customer customer = new Customer(id,name,nicNo,address,tel);
 
         try {
-            boolean isUpdate = CustomerDAOImpl.update(customer);
+            boolean isUpdate = customerBO.updateCustomer(customer);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION,"CustomerDTO is updated!").show();
             }
@@ -209,7 +212,7 @@ public class CustomerFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = CustomerDAOImpl.delete(id);
+            boolean isDeleted = customerBO.deleteCustomer(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION,"CustomerDTO Deleted!");
             }

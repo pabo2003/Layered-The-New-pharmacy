@@ -13,9 +13,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.gdse.BO.BOFactory;
+import lk.ijse.gdse.BO.EmployeeBO;
+import lk.ijse.gdse.DTO.EmployeeDTO;
 import lk.ijse.gdse.Util.Regex;
-import lk.ijse.gdse.model.Employee;
-import lk.ijse.gdse.DAO.EmployeeRepo;
+import lk.ijse.gdse.Entity.Employee;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -82,7 +84,7 @@ public class EmployeeFormController {
     @FXML
     private TextField txtSalary;
 
-
+    EmployeeBO employeeBO  = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.EMPLOYEE);
 
     public void initialize() {
        setCellValueFactory();
@@ -131,7 +133,7 @@ public class EmployeeFormController {
 
     private void getCurrentEmployeeId() {
         try {
-            String currentId = EmployeeRepo.getCurrentId();
+            String currentId = employeeBO.getCurrentId();
             String nextOrderId = generateNextOrderId(currentId);
             txtId.setText(nextOrderId);
 
@@ -151,8 +153,8 @@ public class EmployeeFormController {
     private void loadAllEmployee() {
         ObservableList<Employee> objList = FXCollections.observableArrayList();
         try {
-            List<Employee> employeeList = EmployeeRepo.getAll();
-            for (Employee employee : employeeList) {
+            List<EmployeeDTO> employeeList = employeeBO.getAllEmployee();
+            for (EmployeeDTO employee : employeeList) {
                 Employee employee1 = new Employee(
                         employee.getEmployeeId(),
                         employee.getName(),
@@ -182,7 +184,7 @@ public class EmployeeFormController {
     public void txtSearchOnAction(ActionEvent actionEvent) throws SQLException {
         String tel = txtTel.getText();
 
-        Employee employee = EmployeeRepo.searchByTel(tel);
+        Employee employee = employeeBO.searchByTel(tel);
 
         if (employee != null) {
             txtId.setText(employee.getEmployeeId());
@@ -200,7 +202,7 @@ public class EmployeeFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = EmployeeRepo.delete(id);
+            boolean isDeleted = employeeBO.deleteEmployee(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION, "EmployeeDTO Deleted!");
             }
@@ -236,7 +238,7 @@ public class EmployeeFormController {
 
         try {
             if (isValied()) {
-                boolean isSaved = EmployeeRepo.save(new Employee(id, name, nicNo, address, tel, salary));
+                boolean isSaved = employeeBO.saveEmployee(new Employee(id, name, nicNo, address, tel, salary));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "EmployeeDTO saved successfully!").show();
                     clearFields();
@@ -271,7 +273,7 @@ public class EmployeeFormController {
         Employee employee = new Employee(id, name, nicNo, address, tel, salary);
 
         try {
-            boolean isUpdate = EmployeeRepo.update(employee);
+            boolean isUpdate = employeeBO.updateEmployee(employee);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION, "EmployeeDTO is updated!").show();
             }

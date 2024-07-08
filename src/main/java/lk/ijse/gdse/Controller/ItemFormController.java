@@ -13,11 +13,13 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.gdse.BO.BOFactory;
+import lk.ijse.gdse.BO.ItemBO;
+import lk.ijse.gdse.DTO.ItemDTO;
 import lk.ijse.gdse.Util.Regex;
-import lk.ijse.gdse.model.Item;
-import lk.ijse.gdse.model.Stock;
-import lk.ijse.gdse.DAO.ItemRepo;
-import lk.ijse.gdse.DAO.StockRepo;
+import lk.ijse.gdse.Entity.Item;
+import lk.ijse.gdse.Entity.Stock;
+import lk.ijse.gdse.DAO.Impl.StockDAOImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -76,6 +78,7 @@ public class ItemFormController {
 
     @FXML
     private TextField txtUnitPrice;
+    ItemBO itemBO  = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ITEM);
 
     @FXML
     private void initialize() {
@@ -116,7 +119,7 @@ public class ItemFormController {
 
     private void getCurrentItemId() {
         try {
-            String currentId = ItemRepo.getCurrentId();
+            String currentId = itemBO.getCurrentId();
             String nextOrderId = generateNextItemId(currentId);
             txtCode.setText(nextOrderId);
 
@@ -144,7 +147,7 @@ public class ItemFormController {
     private void loadAllItems() {
         ObservableList<Item> obList = FXCollections.observableArrayList();
         try {
-            List<Item> itemList = ItemRepo.getAll();
+            List<ItemDTO> itemList = itemBO.getAllItem();
             obList.addAll(itemList);
             tblItem.setItems(obList);
         } catch (SQLException e) {
@@ -176,7 +179,7 @@ public class ItemFormController {
         List<Item> itemsToDelete = new ArrayList<>(selectedRows);
         try {
             for (Item item : itemsToDelete) {
-                boolean isDeleted = ItemRepo.delete(item.getItemId());
+                boolean isDeleted = itemBO.deleteItem(item.getItemId());
                 if (isDeleted) {
                     tblItem.getItems().remove(item);
                 } else {
@@ -200,7 +203,7 @@ public class ItemFormController {
 
         try {
             if (isValied()) {
-                boolean isSaved = ItemRepo.save(new Item(itemId, description, unitPrice, qtyOnHand, stockId));
+                boolean isSaved = itemBO.saveItem(new Item(itemId, description, unitPrice, qtyOnHand, stockId));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "ItemDTO saved successfully!").show();
                     clearFields();
@@ -225,7 +228,7 @@ public class ItemFormController {
 
         Item item = new Item(itemId, description, unitPrice, qtyOnHand, stockId);
         try {
-            boolean isUpdate = ItemRepo.update(item);
+            boolean isUpdate = itemBO.updateItem(item);
             if (isUpdate) {
                 showAlert(Alert.AlertType.CONFIRMATION, "ItemDTO is updated!");
             }
@@ -240,7 +243,7 @@ public class ItemFormController {
     void comStockIdOnAction(ActionEvent event) {
         String id = comStockId.getValue();
         try {
-            Stock stock = StockRepo.searchById(id);
+            Stock stock = StockDAOImpl.searchById(id);
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Error occurred while searching for stock: " + e.getMessage());
         }
@@ -249,7 +252,7 @@ public class ItemFormController {
     private void getStockIds() {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<String> idList = StockRepo.getId();
+            List<String> idList = StockDAOImpl.getId();
             obList.addAll(idList);
             comStockId.setItems(obList);
         } catch (SQLException e) {

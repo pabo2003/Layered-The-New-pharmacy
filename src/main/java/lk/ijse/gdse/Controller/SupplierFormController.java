@@ -18,8 +18,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.gdse.Util.Regex;
-import lk.ijse.gdse.model.Supplier;
-import lk.ijse.gdse.DAO.SupplierRepo;
+import lk.ijse.gdse.Entity.Supplier;
+import lk.ijse.gdse.DAO.Impl.SupplierDAOImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -81,7 +81,7 @@ public class SupplierFormController {
     public void txtSearchOnAction(ActionEvent actionEvent) throws SQLException {
         String id = txtId.getText();
 
-        Supplier supplier = SupplierRepo.searchById(id);
+        Supplier supplier = SupplierDAOImpl.searchById(id);
 
         if (supplier != null) {
             txtId.setText(supplier.getSupplierId());
@@ -137,7 +137,7 @@ public class SupplierFormController {
 
     private void getCurrentCustomerId() {
         try {
-            String currentId = SupplierRepo.getCurrentId();
+            String currentId = SupplierDAOImpl.getCurrentId();
             String nextOrderId = generateNextOrderId(currentId);
             txtId.setText(nextOrderId);
 
@@ -157,7 +157,7 @@ public class SupplierFormController {
     private void loadAllSuppliers() {
         ObservableList<Supplier> objList = FXCollections.observableArrayList();
         try {
-            List<Supplier> supplierList = SupplierRepo.getAll();
+            List<Supplier> supplierList = SupplierDAOImpl.getAll();
             for (Supplier supplier : supplierList) {
                 Supplier supplier1 = new Supplier(
                         supplier.getSupplierId(),
@@ -212,7 +212,7 @@ public class SupplierFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = SupplierRepo.delete(id);
+            boolean isDeleted = SupplierDAOImpl.delete(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION,"SupplierDTO Deleted!");
             }
@@ -232,7 +232,7 @@ public class SupplierFormController {
 
         try {
             if (isValied()) {
-                boolean isSaved = SupplierRepo.save(new Supplier(id, name, description, address, tel));
+                boolean isSaved = SupplierDAOImpl.save(new Supplier(id, name, description, address, tel));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "SupplierDTO saved successfully!").show();
                     clearFields();
@@ -258,7 +258,7 @@ public class SupplierFormController {
         Supplier supplier = new Supplier(id,name,description,address,tel);
 
         try {
-            boolean isUpdate = SupplierRepo.update(supplier);
+            boolean isUpdate = SupplierDAOImpl.update(supplier);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION,"SupplierDTO is updated!").show();
             }
