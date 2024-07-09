@@ -25,11 +25,11 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
             try {
                 boolean isPayUpdated = paymentDAO.save(po.getPayment());
                 if (isPayUpdated) {
-                    boolean isOrderSaved = OrderDAOImpl.save(po.getOrder());
+                    boolean isOrderSaved = orderDAO.save(po.getOrder());
                     if (isOrderSaved) {
-                        boolean isQtyUpdated = ItemDAOImpl.update1(po.getOdList());
+                        boolean isQtyUpdated = itemDAO.update1(po.getOdList());
                         if (isQtyUpdated) {
-                            boolean isOrderDetailSaved = OrderDetailDAOImpl.save(po.getOdList());
+                            boolean isOrderDetailSaved = orderDetailDAO.save(po.getOdList());
                             if (isOrderDetailSaved) {
 
                                 connection.commit();

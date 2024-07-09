@@ -21,7 +21,7 @@ public class SupplierDetailsBOImpl implements SupplierDetailsBO {
 
     @Override
     public boolean saveSupplierDetails(SupplierDetails od) throws SQLException {
-        return supplierDetailsDAO.save(SupplierDetails(od.));
+        return supplierDetailsDAO.save(new SupplierDetails(od.getSupplierId(), od.getStockId(), od.getDate()));
     }
 
     @Override
