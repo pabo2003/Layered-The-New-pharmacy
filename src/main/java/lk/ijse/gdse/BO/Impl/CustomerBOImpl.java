@@ -14,7 +14,7 @@ public class CustomerBOImpl implements CustomerBO {
     CustomerDAO customerDAO = (CustomerDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.CUSTOMER);
     public boolean saveCustomer(CustomerDTO customer) throws SQLException {
         return customerDAO.save(new Customer(customer.getCuId(), customer.getName(), customer.getNicNo(),customer.getAddress(), customer.getTel()));
-            }
+    }
 
     public ArrayList<CustomerDTO> getAllCustomer() throws SQLException {
         ArrayList<CustomerDTO> allCustomers= new ArrayList<>();

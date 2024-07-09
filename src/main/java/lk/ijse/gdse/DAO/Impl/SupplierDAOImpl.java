@@ -2,6 +2,7 @@ package lk.ijse.gdse.DAO.Impl;
 
 
 import lk.ijse.gdse.DAO.SQLUtil;
+import lk.ijse.gdse.DAO.SupplierDAO;
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.Entity.Customer;
 import lk.ijse.gdse.Entity.Supplier;
@@ -13,8 +14,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SupplierDAOImpl {
-    public static boolean save(Supplier supplier) throws SQLException {
+public class SupplierDAOImpl implements SupplierDAO {
+    public boolean save(Supplier supplier) throws SQLException {
         /*String sql = "INSERT INTO supplier VALUES(?,?,?,?,?)";
         Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -29,7 +30,7 @@ public class SupplierDAOImpl {
         return SQLUtil.execute("INSERT INTO supplier VALUES(?,?,?,?,?)",supplier.getSupplierId(),supplier.getName(),supplier.getDescription(),supplier.getAddress(),supplier.getTel());
     }
 
-    public static List<Supplier> getAll() throws SQLException {
+    public ArrayList<Supplier> getAll() throws SQLException {
         /*String sql = "SELECT*FROM supplier";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -63,7 +64,7 @@ public class SupplierDAOImpl {
         return suppliers;
     }
 
-    public static boolean delete(String id) throws SQLException {
+    public boolean delete(String id) throws SQLException {
         /*String sql = "DELETE FROM supplier WHERE supplierId = ?";
 
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
@@ -73,7 +74,7 @@ public class SupplierDAOImpl {
         return SQLUtil.execute("DELETE FROM supplier WHERE supplierId = ?",id);
     }
 
-    public static boolean update(Supplier supplier) throws SQLException {
+    public boolean update(Supplier supplier) throws SQLException {
         /*String sql = "UPDATE supplier SET name = ? , description = ? , address = ? , tel = ? WHERE supplierId = ?";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -87,7 +88,7 @@ public class SupplierDAOImpl {
         return SQLUtil.execute("UPDATE supplier SET name = ? , description = ? , address = ? , tel = ? WHERE supplierId = ?",supplier.getName(),supplier.getDescription(),supplier.getAddress(),supplier.getTel(),supplier.getSupplierId());
     }
 
-    public static Supplier searchById(String id) throws SQLException {
+    public Supplier searchByTel(String id) throws SQLException {
         /*String sql = "SELECT*FROM supplier WHERE supplierId = ?";
 
         Connection connection = DbConnection.getInstance().getConnection();
@@ -112,7 +113,7 @@ public class SupplierDAOImpl {
         return new Supplier(rst.getString(1),rst.getString(2),rst.getString(3),rst.getString(4),rst.getString(5) );
     }
 
-    public static List<String> getId() throws SQLException {
+    public List<String> getTel() throws SQLException {
         /*String sql = "SELECT supplierId from supplier";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -136,7 +137,7 @@ public class SupplierDAOImpl {
     }
 
 
-    public static String getCurrentId() throws SQLException {
+    public String getCurrentId() throws SQLException {
         /*String sql = "SELECT supplierId FROM supplier ORDER BY supplierId DESC LIMIT 1";
         PreparedStatement pstm = DbConnection.getInstance().getConnection()
                 .prepareStatement(sql);

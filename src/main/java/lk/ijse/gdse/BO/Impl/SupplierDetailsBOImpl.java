@@ -25,11 +25,11 @@ public class SupplierDetailsBOImpl implements SupplierDetailsBO {
     }
 
     @Override
-    public List<SupplierDetailsDTO> getAllSuppliers() throws SQLException {
+    public ArrayList<SupplierDetailsDTO> getAllSuppliers() throws SQLException {
         ArrayList<SupplierDetailsDTO> allSupplierDetails= new ArrayList<>();
         ArrayList<SupplierDetails> all = supplierDetailsDAO.getAll();
         for (SupplierDetails sd : all) {
-            all.add(new SupplierDetails(sd.getSupplierId(),sd.getStockId(),sd.getDate()));
+            allSupplierDetails.add(new SupplierDetailsDTO(sd.getSupplierId(),sd.getStockId(),sd.getDate()));
         }
         return allSupplierDetails;
     }

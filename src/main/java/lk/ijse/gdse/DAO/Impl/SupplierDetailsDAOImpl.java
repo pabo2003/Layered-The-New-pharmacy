@@ -1,6 +1,7 @@
 package lk.ijse.gdse.DAO.Impl;
 
 import lk.ijse.gdse.DAO.SQLUtil;
+import lk.ijse.gdse.DAO.SupplierDetailsDAO;
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.Entity.Stock;
 import lk.ijse.gdse.Entity.SupplierDetails;
@@ -12,10 +13,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SupplierDetailsDAOImpl {
-    public static boolean save(List<SupplierDetails> odList) throws SQLException {
+public class SupplierDetailsDAOImpl implements SupplierDetailsDAO {
+    public boolean saveSupplierDetails(List<SupplierDetails> odList) throws SQLException {
         for (SupplierDetails od : odList){
-            boolean isSaved = saveSupplierDetails(od);
+            boolean isSaved = saveSupplierDetails((List<SupplierDetails>) od);
             if (isSaved) {
                 return false;
             }
@@ -23,7 +24,7 @@ public class SupplierDetailsDAOImpl {
         return true;
     }
 
-    private static boolean saveSupplierDetails(SupplierDetails od) throws SQLException {
+    public boolean save(SupplierDetails od) throws SQLException {
         /*String sql = "INSERT INTO supplierDetails (supplierId,stockId,date) VALUES (?,?,?)";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -35,7 +36,7 @@ public class SupplierDetailsDAOImpl {
         return SQLUtil.execute("INSERT INTO supplierDetails (supplierId,stockId,date) VALUES (?,?,?)",od.getSupplierId(),od.getStockId(),od.getDate());
     }
 
-    public static List<SupplierDetails> getAll() throws SQLException {
+    public ArrayList<SupplierDetails> getAll() throws SQLException {
         /*String sql = "SELECT *FROM supplierDetails";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
         ResultSet resultSet = pstm.executeQuery();
@@ -62,5 +63,30 @@ public class SupplierDetailsDAOImpl {
             supplierDetails.add(supplierDetail);
         }
         return supplierDetails;
+    }
+
+    @Override
+    public boolean delete(String id) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public boolean update(SupplierDetails entity) throws SQLException {
+        return false;
+    }
+
+    @Override
+    public SupplierDetails searchByTel(String tel) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public List<String> getTel() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public String getCurrentId() throws SQLException {
+        return null;
     }
 }

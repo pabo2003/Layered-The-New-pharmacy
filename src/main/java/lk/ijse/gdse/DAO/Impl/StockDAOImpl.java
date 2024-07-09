@@ -1,6 +1,7 @@
 package lk.ijse.gdse.DAO.Impl;
 
 import lk.ijse.gdse.DAO.SQLUtil;
+import lk.ijse.gdse.DAO.StockDAO;
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.Entity.Customer;
 import lk.ijse.gdse.Entity.Stock;
@@ -12,8 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StockDAOImpl {
-    public static boolean save(Stock stock) throws SQLException {
+public class StockDAOImpl implements StockDAO {
+    public boolean save(Stock stock) throws SQLException {
         /*String sql = "INSERT INTO stock VALUES(?,?,?)";
         Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -26,7 +27,7 @@ public class StockDAOImpl {
         return SQLUtil.execute("INSERT INTO stock VALUES(?,?,?)",stock.getStockId(),stock.getDescription(),stock.getCategory());
     }
 
-    public static List<Stock> getAll() throws SQLException {
+    public ArrayList<Stock> getAll() throws SQLException {
         /*String sql = "SELECT * FROM stock";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -58,7 +59,7 @@ public class StockDAOImpl {
         return stocks;
     }
 
-    public static boolean delete(String id) throws SQLException {
+    public boolean delete(String id) throws SQLException {
         /*String sql = "DELETE FROM stock WHERE stockId = ?";
 
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
@@ -68,7 +69,7 @@ public class StockDAOImpl {
         return SQLUtil.execute("DELETE FROM stock WHERE stockId = ?",id);
     }
 
-    public static boolean update(Stock stock) throws SQLException {
+    public boolean update(Stock stock) throws SQLException {
         /*String sql = "UPDATE stock SET description = ? , category = ? WHERE stockId = ?";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -82,7 +83,7 @@ public class StockDAOImpl {
 
     }
 
-    public static Stock searchById(String id) throws SQLException {
+    public Stock searchByTel(String id) throws SQLException {
         /*String sql = "SELECT*FROM stock WHERE stockId = ?";
 
         Connection connection = DbConnection.getInstance().getConnection();
@@ -105,7 +106,7 @@ public class StockDAOImpl {
         return new Stock(rst.getString(1),rst.getString(2),rst.getString(3));
     }
 
-    public static List<String> getId() throws SQLException {
+    public List<String> getTel() throws SQLException {
         /*String sql = "SELECT stockId from stock";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -129,7 +130,7 @@ public class StockDAOImpl {
         return idList;
     }
 
-    public static String getCurrentId() throws SQLException {
+    public String getCurrentId() throws SQLException {
         /*String sql = "SELECT stockId FROM stock ORDER BY stockId DESC LIMIT 1";
         PreparedStatement pstm = DbConnection.getInstance().getConnection()
                 .prepareStatement(sql);

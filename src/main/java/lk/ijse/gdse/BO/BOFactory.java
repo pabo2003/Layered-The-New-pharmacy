@@ -1,6 +1,7 @@
 package lk.ijse.gdse.BO;
 
-import lk.ijse.gdse.BO.Impl.CustomerBOImpl;
+import lk.ijse.gdse.BO.Impl.*;
+import lk.ijse.gdse.DAO.Impl.*;
 
 public class BOFactory {
     private static BOFactory boFactory;
@@ -18,6 +19,24 @@ public class BOFactory {
         switch (boType) {
             case CUSTOMER:
                 return new CustomerBOImpl();
+            case EMPLOYEE:
+                return new EmployeeBOImpl();
+            case ITEM:
+                return new ItemBOImpl();
+            case ORDER:
+                return new OrderBOImpl();
+            case ORDER_DETAILS:
+                return new OrderDetailsBOImpl();
+            case PAYMENT:
+                return new PaymentBOImpl();
+            case PLACE_ORDER:
+                return new PlaceOrderBOImpl();
+            case STOCK:
+                return new StockBOImpl();
+            case SUPPLIER:
+                return new SupplierBOImpl();
+            case SUPPLIER_DETAILS:
+                return new SupplierDetailsBOImpl();
             default:
                 return null;
         }

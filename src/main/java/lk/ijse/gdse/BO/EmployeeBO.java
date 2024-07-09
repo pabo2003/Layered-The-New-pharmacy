@@ -6,7 +6,7 @@ import lk.ijse.gdse.Entity.Employee;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface EmployeeBO {
+public interface EmployeeBO extends SuperBO{
     public boolean saveEmployee(Employee employee) throws SQLException;
 
     public List<EmployeeDTO> getAllEmployee() throws SQLException;

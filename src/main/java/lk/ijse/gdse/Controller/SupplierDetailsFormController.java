@@ -1,3 +1,4 @@
+/*
 package lk.ijse.gdse.Controller;
 
 import com.jfoenix.controls.JFXButton;
@@ -14,6 +15,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import lk.ijse.gdse.BO.*;
+import lk.ijse.gdse.DTO.SupplierDetailsDTO;
 import lk.ijse.gdse.Entity.Stock;
 import lk.ijse.gdse.Entity.Supplier;
 import lk.ijse.gdse.Entity.SupplierDetails;
@@ -25,6 +28,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SupplierDetailsFormController {
@@ -72,8 +76,12 @@ public class SupplierDetailsFormController {
     private AnchorPane root;
 
     @FXML
-    private TableView<SupplierDetails> tblSupplierDetails;
+    private TableView<SupplierDetailsDTO> tblSupplierDetails;
+    SupplierBO supplierBO  = (SupplierBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.SUPPLIER);
 
+    StockBO stockBO  = (StockBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.STOCK);
+
+    SupplierDetailsBO supplierDetailsBO  = (SupplierDetailsBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.SUPPLIER_DETAILS);
     public void initialize() {
         setDate();
         getSupplierIds();
@@ -136,7 +144,7 @@ public class SupplierDetailsFormController {
         ObservableList<Object> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = StockDAOImpl.getId();
+            List<String> idList = stockBO.getId();
             for(String id : idList) {
                 obList.add(id);
             }
@@ -150,7 +158,7 @@ public class SupplierDetailsFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = SupplierDAOImpl.getId();
+            List<String> idList = supplierBO.getId();
 
             for(String id : idList) {
                 obList.add(id);
@@ -163,10 +171,10 @@ public class SupplierDetailsFormController {
         }
     }
 
-    private void loadAllSupplierDetails() {
+    public void loadAllSupplierDetails() {
         ObservableList<SupplierDetails> obList = FXCollections.observableArrayList();
         try {
-            List<SupplierDetails> supplierDetailsList = SupplierDetailsDAOImpl.getAll();
+            List<SupplierDetails> supplierDetailsList = SupplierDetailsBO.getAllSuppliers();
             for (SupplierDetails supplierDetails : supplierDetailsList) {
                 SupplierDetails supplierDetails1 = new SupplierDetails();
                 supplierDetails1.setStockId(supplierDetails.getStockId());
@@ -207,7 +215,7 @@ public class SupplierDetailsFormController {
         SupplierDetails supplierDetails = new SupplierDetails(stockId, supplierId, date);
 
         try {
-            boolean isSaved = SupplierDetailsDAOImpl.save(List.of(supplierDetails));
+            boolean isSaved = supplierDetailsBO.save(List.of(supplierDetails));
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "SupplierDTO Details saved successfully!").show();
                 clearFields();
@@ -240,7 +248,7 @@ public class SupplierDetailsFormController {
     void comStockIdOnAction(ActionEvent event) {
         String id = (String) comStockId.getValue();
         try {
-            Stock stock = StockDAOImpl.searchById(id);
+            Stock stock = stockBO.searchById(id);
             lblStockDescription.setText(stock.getDescription());
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -251,7 +259,7 @@ public class SupplierDetailsFormController {
     void comSupplierIdOnAction(ActionEvent event) {
         String id = comSupplierId.getValue();
         try {
-            Supplier supplier = SupplierDAOImpl.searchById(id);
+            Supplier supplier = supplierBO.searchById(id);
             lblSupplierName.setText(supplier.getName());
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -270,4 +278,4 @@ public class SupplierDetailsFormController {
         root.getChildren().clear();
         root.getChildren().add(rootNode);
     }
-}
+}*/

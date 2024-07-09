@@ -1,8 +1,8 @@
 package lk.ijse.gdse.DAO.Impl;
 
+import lk.ijse.gdse.DAO.ItemDAO;
 import lk.ijse.gdse.DAO.SQLUtil;
 import lk.ijse.gdse.DB.DbConnection;
-import lk.ijse.gdse.Entity.Customer;
 import lk.ijse.gdse.Entity.Item;
 import lk.ijse.gdse.Entity.OrderDetails;
 
@@ -13,8 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemDAOImpl {
-    public static boolean save(Item item) throws SQLException {
+public class ItemDAOImpl implements ItemDAO {
+    public boolean save(Item item) throws SQLException {
         /*String sql = "INSERT INTO item VALUES(?,?,?,?,?)";
         Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -30,7 +30,7 @@ public class ItemDAOImpl {
     }
 
 
-    public static List<Item> getAll() throws SQLException {
+    public ArrayList<Item> getAll() throws SQLException {
         /*String sql = "SELECT*FROM item";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -65,7 +65,7 @@ public class ItemDAOImpl {
     }
 
 
-    public static boolean delete(String id) throws SQLException {
+    public boolean delete(String id) throws SQLException {
         /*String sql = "DELETE FROM item WHERE itemId = ?";
 
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
@@ -75,7 +75,7 @@ public class ItemDAOImpl {
         return SQLUtil.execute("DELETE FROM item WHERE itemId = ?",id);
     }
 
-    public static boolean update(Item item) throws SQLException {
+    public boolean update(Item item) throws SQLException {
         /*String sql = "UPDATE item SET description = ? , qtyOnHand = ? , unitPrice = ? , stockId = ? WHERE itemId = ?";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -89,7 +89,7 @@ public class ItemDAOImpl {
         return SQLUtil.execute("UPDATE item SET description = ? , qtyOnHand = ? , unitPrice = ? , stockId = ? WHERE itemId = ?",item.getDescription(),item.getQtyOnHand(),item.getUnitPrice(),item.getStockId(),item.getItemId());
     }
 
-    public static List<String> getIds() throws SQLException {
+    public List<String> getTel() throws SQLException {
         /*String sql = "SELECT itemId FROM item";
         ResultSet resultSet = DbConnection.getInstance().getConnection().prepareStatement(sql).executeQuery();
 
@@ -112,7 +112,7 @@ public class ItemDAOImpl {
         return idList;
     }
 
-    public static Item searchById(String id) throws SQLException {
+    public Item searchByTel(String id) throws SQLException {
         /*String sql = "SELECT * FROM item WHERE itemId = ?";
         Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -135,7 +135,7 @@ public class ItemDAOImpl {
     }
 
 
-    public static boolean update1(List<OrderDetails> odList) throws SQLException {
+    public boolean update1(List<OrderDetails> odList) throws SQLException {
         for (OrderDetails od : odList) {
             boolean isUpdateQty = updateQty(od.getItemId(), od.getQty());
             if(!isUpdateQty) {
@@ -145,7 +145,7 @@ public class ItemDAOImpl {
         return true;
     }
 
-    public static boolean updateQty(String Id, int qty) throws SQLException {
+    public boolean updateQty(String Id, int qty) throws SQLException {
         String sql = "UPDATE item SET qtyOnHand = qtyOnHand - ? WHERE itemId = ?";
 
         PreparedStatement pstm = DbConnection.getInstance().getConnection()
@@ -157,7 +157,7 @@ public class ItemDAOImpl {
         return pstm.executeUpdate() > 0;
     }
 
-    public static String getCurrentId() throws SQLException {
+    public String getCurrentId() throws SQLException {
         /*String sql = "SELECT itemId FROM item ORDER BY itemId DESC LIMIT 1";
         PreparedStatement pstm = DbConnection.getInstance().getConnection()
                 .prepareStatement(sql);

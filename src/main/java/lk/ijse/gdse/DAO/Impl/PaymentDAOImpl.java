@@ -1,5 +1,6 @@
 package lk.ijse.gdse.DAO.Impl;
 
+import lk.ijse.gdse.DAO.PaymentDAO;
 import lk.ijse.gdse.DAO.SQLUtil;
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.DTO.PaymentDTO;
@@ -9,8 +10,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentDAOImpl {
-    public static boolean save(PaymentDTO payment) throws SQLException {
+public class PaymentDAOImpl implements PaymentDAO {
+    public boolean save(Payment payment) throws SQLException {
         /*String sql = "INSERT INTO payment VALUES(?,?,?,?)";
         Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement(sql);
@@ -24,7 +25,7 @@ public class PaymentDAOImpl {
         return SQLUtil.execute("INSERT INTO payment VALUES(?,?,?,?)",payment.getPayId(),payment.getMethod(),payment.getAmount(),payment.getDate());
     }
 
-    public static List<Payment> getAll() throws SQLException {
+    public ArrayList<Payment> getAll() throws SQLException {
         /*String sql = "SELECT * FROM payment";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -52,7 +53,7 @@ public class PaymentDAOImpl {
         return payments;
     }
 
-    public static boolean delete(String id) throws SQLException {
+    public boolean delete(String id) throws SQLException {
         /*String sql = "DELETE FROM payment WHERE payId = ?";
 
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
@@ -62,7 +63,7 @@ public class PaymentDAOImpl {
         return SQLUtil.execute("DELETE FROM payment WHERE payId = ?",id);
     }
 
-    public static boolean update(Payment payment) throws SQLException {
+    public boolean update(Payment payment) throws SQLException {
         /*String sql = "UPDATE payment SET method = ? , amount = ? , date ? WHERE payId = ?";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -75,7 +76,7 @@ public class PaymentDAOImpl {
         return SQLUtil.execute("UPDATE payment SET method = ? , amount = ? , date ? WHERE payId = ?",payment.getMethod(),payment.getAmount(),payment.getDate(),payment.getPayId());
     }
 
-    public static Payment searchById(String id) throws SQLException {
+    public Payment searchByTel(String id) throws SQLException {
         /*String sql = "SELECT*FROM payment WHERE payId = ?";
 
         Connection connection = DbConnection.getInstance().getConnection();
@@ -99,7 +100,7 @@ public class PaymentDAOImpl {
         return new Payment(rst.getString(1), rst.getString(2), rst.getDouble(3),rst.getDate(4));
     }
 
-    public static List<String> getId() throws SQLException {
+    public List<String> getTel() throws SQLException {
         /*String sql = "SELECT payId from payment";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
@@ -121,7 +122,7 @@ public class PaymentDAOImpl {
 
         return idList;
     }
-    public static String getCurrentId() throws SQLException {
+    public String getCurrentId() throws SQLException {
         /*String sql = "SELECT payId FROM payment ORDER BY payId DESC LIMIT 1";
         try (PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
              ResultSet resultSet = pstm.executeQuery()) {

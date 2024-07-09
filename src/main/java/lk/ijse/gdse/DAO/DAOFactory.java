@@ -1,6 +1,6 @@
 package lk.ijse.gdse.DAO;
 
-import lk.ijse.gdse.DAO.Impl.CustomerDAOImpl;
+import lk.ijse.gdse.DAO.Impl.*;
 
 public class DAOFactory {
     private static DAOFactory daoFactory;
@@ -15,6 +15,22 @@ public class DAOFactory {
         switch (types) {
             case CUSTOMER:
                 return new CustomerDAOImpl();
+            case EMPLOYEE:
+                return new EmployeeDAOImpl();
+            case ITEM:
+                return new ItemDAOImpl();
+            case ORDER:
+                return new OrderDAOImpl();
+            case ORDER_DETAILS:
+                return new OrderDetailDAOImpl();
+            case PAYMENT:
+                return new PaymentDAOImpl();
+            case STOCK:
+                return new StockDAOImpl();
+            case SUPPLIER:
+                return new SupplierDAOImpl();
+            case SUPPLIER_DETAILS:
+                return new SupplierDetailsDAOImpl();
             default:
                 return null;
         }

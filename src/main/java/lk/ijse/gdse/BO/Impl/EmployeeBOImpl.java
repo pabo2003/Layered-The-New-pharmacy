@@ -12,12 +12,10 @@ import java.util.List;
 
 public class EmployeeBOImpl implements EmployeeBO {
     EmployeeDAO employeeDAO = (EmployeeDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.EMPLOYEE);
-    @Override
     public boolean saveEmployee(Employee employee) throws SQLException {
         return employeeDAO.save(new Employee(employee.getEmployeeId(), employee.getName(), employee.getNICNo(),employee.getAddress(), employee.getTel(),employee.getSalary()));
     }
 
-    @Override
     public ArrayList<EmployeeDTO> getAllEmployee() throws SQLException {
         ArrayList<EmployeeDTO> allEmployee= new ArrayList<>();
         ArrayList<Employee> all = employeeDAO.getAll();
@@ -27,27 +25,22 @@ public class EmployeeBOImpl implements EmployeeBO {
         return allEmployee;
     }
 
-    @Override
     public boolean deleteEmployee(String id) throws SQLException {
         return employeeDAO.delete(id);
     }
 
-    @Override
     public boolean updateEmployee(Employee employee) throws SQLException {
         return employeeDAO.update(new Employee(employee.getEmployeeId(), employee.getName(), employee.getNICNo(), employee.getAddress(), employee.getTel(), employee.getSalary()));
     }
 
-    @Override
     public Employee searchByTel(String tel) throws SQLException {
         return employeeDAO.searchByTel(tel);
     }
 
-    @Override
     public List<String> getTel() throws SQLException {
         return employeeDAO.getTel();
     }
 
-    @Override
     public String getCurrentId() throws SQLException {
         return employeeDAO.getCurrentId();
     }

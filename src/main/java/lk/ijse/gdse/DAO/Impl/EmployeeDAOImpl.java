@@ -2,12 +2,8 @@ package lk.ijse.gdse.DAO.Impl;
 
 import lk.ijse.gdse.DAO.EmployeeDAO;
 import lk.ijse.gdse.DAO.SQLUtil;
-import lk.ijse.gdse.DB.DbConnection;
-import lk.ijse.gdse.Entity.Customer;
 import lk.ijse.gdse.Entity.Employee;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
