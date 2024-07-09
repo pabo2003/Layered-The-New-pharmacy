@@ -1,6 +1,8 @@
 package lk.ijse.gdse.DAO.Impl;
 
+import lk.ijse.gdse.DAO.SQLUtil;
 import lk.ijse.gdse.DB.DbConnection;
+import lk.ijse.gdse.Entity.Stock;
 import lk.ijse.gdse.Entity.SupplierDetails;
 
 import java.sql.Date;
@@ -22,18 +24,19 @@ public class SupplierDetailsDAOImpl {
     }
 
     private static boolean saveSupplierDetails(SupplierDetails od) throws SQLException {
-        String sql = "INSERT INTO supplierDetails (supplierId,stockId,date) VALUES (?,?,?)";
+        /*String sql = "INSERT INTO supplierDetails (supplierId,stockId,date) VALUES (?,?,?)";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
         pstm.setString(1,od.getSupplierId());
         pstm.setString(2,od.getStockId());
         pstm.setString(3, String.valueOf(od.getDate()));
 
-        return pstm.executeUpdate() > 0;
+        return pstm.executeUpdate() > 0;*/
+        return SQLUtil.execute("INSERT INTO supplierDetails (supplierId,stockId,date) VALUES (?,?,?)",od.getSupplierId(),od.getStockId(),od.getDate());
     }
 
     public static List<SupplierDetails> getAll() throws SQLException {
-        String sql = "SELECT *FROM supplierDetails";
+        /*String sql = "SELECT *FROM supplierDetails";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
         ResultSet resultSet = pstm.executeQuery();
         ArrayList<SupplierDetails> SDList = new ArrayList<>();
@@ -46,6 +49,18 @@ public class SupplierDetailsDAOImpl {
             SupplierDetails supplierDetails = new SupplierDetails(stockId,supplierId,date);
             SDList.add(supplierDetails);
         }
-        return SDList;
+        return SDList;*/
+        ArrayList<SupplierDetails> supplierDetails = new ArrayList<>();
+        ResultSet rst = SQLUtil.execute("SELECT *FROM supplierDetails");
+        while (rst.next()){
+            SupplierDetails supplierDetail = new SupplierDetails(
+                    rst.getString(1),
+                    rst.getString(2),
+                    rst.getDate(3)
+
+            );
+            supplierDetails.add(supplierDetail);
+        }
+        return supplierDetails;
     }
 }
