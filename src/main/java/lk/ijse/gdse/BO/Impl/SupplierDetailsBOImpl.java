@@ -6,7 +6,7 @@ import lk.ijse.gdse.DAO.StockDAO;
 import lk.ijse.gdse.DAO.SupplierDetailsDAO;
 import lk.ijse.gdse.DTO.SupplierDTO;
 import lk.ijse.gdse.DTO.SupplierDetailsDTO;
-import lk.ijse.gdse.Entity.Supplier;
+import lk.ijse.gdse.Entity.SupplierDetails;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class SupplierDetailsBOImpl implements SupplierDetailsBO {
 
     @Override
     public boolean saveSupplierDetails(SupplierDetails od) throws SQLException {
-        return supplierDetailsDAO.save(new lk.ijse.gdse.model.SupplierDetails(od.));
+        return supplierDetailsDAO.save(SupplierDetails(od.));
     }
 
     @Override
@@ -29,7 +29,7 @@ public class SupplierDetailsBOImpl implements SupplierDetailsBO {
         ArrayList<SupplierDetailsDTO> allSupplierDetails= new ArrayList<>();
         ArrayList<SupplierDetails> all = supplierDetailsDAO.getAll();
         for (SupplierDetails sd : all) {
-            all.add(new SupplierDetailsDTO(sd.(),sd.getName(),sd.getDescription(),sd.getAddress(),sd.getTel()));
+            all.add(new SupplierDetails(sd.getSupplierId(),sd.getStockId(),sd.getDate()));
         }
         return allSupplierDetails;
     }

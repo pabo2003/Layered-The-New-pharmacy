@@ -19,32 +19,32 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     OrderDetailDAO orderDetailDAO = (OrderDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER_DETAILS);
     @Override
     public boolean placeOrder(PlaceOrderDTO po) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
-        connection.setAutoCommit(false);
+            Connection connection = DbConnection.getInstance().getConnection();
+            connection.setAutoCommit(false);
 
-        try {
-            boolean isPayUpdated = PaymentDAOImpl.save(po.getPayment());
-            if (isPayUpdated) {
-                boolean isOrderSaved = OrderDAOImpl.save(po.getOrder());
-                if (isOrderSaved) {
-                    boolean isQtyUpdated = ItemDAOImpl.update1(po.getOdList());
-                    if (isQtyUpdated) {
-                        boolean isOrderDetailSaved = OrderDetailDAOImpl.save(po.getOdList());
-                        if (isOrderDetailSaved) {
+            try {
+                boolean isPayUpdated = paymentDAO.save(po.getPayment());
+                if (isPayUpdated) {
+                    boolean isOrderSaved = OrderDAOImpl.save(po.getOrder());
+                    if (isOrderSaved) {
+                        boolean isQtyUpdated = ItemDAOImpl.update1(po.getOdList());
+                        if (isQtyUpdated) {
+                            boolean isOrderDetailSaved = OrderDetailDAOImpl.save(po.getOdList());
+                            if (isOrderDetailSaved) {
 
-                            connection.commit();
-                            return true;
+                                connection.commit();
+                                return true;
+                            }
                         }
                     }
                 }
+                connection.rollback();
+                return false;
+            } catch (Exception e) {
+                connection.rollback();
+                return false;
+            } finally {
+                connection.setAutoCommit(true);
             }
-            connection.rollback();
-            return false;
-        } catch (Exception e) {
-            connection.rollback();
-            return false;
-        } finally {
-            connection.setAutoCommit(true);
-        }
     }
 }

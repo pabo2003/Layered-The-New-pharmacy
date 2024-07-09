@@ -1,5 +1,5 @@
 package lk.ijse.gdse.DAO;
 
-
-public interface SupplierDetailsDAO extends CrudDAO<lk.ijse.gdse.model.SupplierDetails>{
+import lk.ijse.gdse.Entity.SupplierDetails;
+public interface SupplierDetailsDAO extends CrudDAO<SupplierDetails>{
 }

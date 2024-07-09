@@ -2,6 +2,7 @@ package lk.ijse.gdse.BO;
 
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.DTO.SupplierDetailsDTO;
+import lk.ijse.gdse.Entity.SupplierDetails;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;

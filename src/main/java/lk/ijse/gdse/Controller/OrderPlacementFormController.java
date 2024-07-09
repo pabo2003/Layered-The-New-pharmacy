@@ -16,10 +16,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import lk.ijse.gdse.BO.BOFactory;
-import lk.ijse.gdse.BO.CustomerBO;
+import lk.ijse.gdse.BO.*;
 import lk.ijse.gdse.DAO.Impl.*;
 import lk.ijse.gdse.DB.DbConnection;
+import lk.ijse.gdse.DTO.OrderDTO;
+import lk.ijse.gdse.DTO.OrderDetailsDTO;
+import lk.ijse.gdse.DTO.PaymentDTO;
+import lk.ijse.gdse.DTO.PlaceOrderDTO;
 import lk.ijse.gdse.Entity.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
@@ -126,7 +129,13 @@ public class OrderPlacementFormController {
     @FXML
     private Label lblEmployeeId;
 
-    CustomerBO customerBO  = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.CUSTOMER);z
+    CustomerBO customerBO  = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.CUSTOMER);
+    EmployeeBO employeeBO = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.EMPLOYEE);
+    ItemBO itemBO  = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ITEM);
+    OrderBO orderBO  = (OrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ORDER);
+    OrderDetailsBO orderDetailsBO  = (OrderDetailsBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ORDER_DETAILS);
+    PaymentBO paymentBO  = (PaymentBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.PAYMENT);
+    PlaceOrderBO placeOrderBO  = (PlaceOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.PLACE_ORDER);
     public void initialize() {
         setDate();
         getCurrentOrderId();
@@ -205,7 +214,7 @@ public class OrderPlacementFormController {
     private void getCurrentOrderId() {
 
         try {
-            String currentId = OrderDAOImpl.getCurrentId();
+            String currentId = orderBO.getCurrentId();
             String nextOrderId = generateNextOrderId(currentId);
             lblOrderId.setText(nextOrderId);
 
@@ -223,7 +232,7 @@ public class OrderPlacementFormController {
     }
     private void getCurrentPayId() {
         try {
-            String currentId = PaymentDAOImpl.getPayCurrentId();
+            String currentId = paymentBO.getCurrentId();
             String nextPayId = generateNextPay(currentId);
             lblPayId.setText(nextPayId);
 
@@ -335,12 +344,12 @@ public class OrderPlacementFormController {
         String PayMethod = "Cash";
 
 
-        Order order = new Order(orderID,desc,Amount,date,customerID,paymentID,EmployeeID);
-        List<OrderDetails> odList = new ArrayList<>();
+        OrderDTO order = new OrderDTO(orderID,desc,Amount,date,customerID,paymentID,EmployeeID);
+        List<OrderDetailsDTO> odList = new ArrayList<>();
 
         for (int i = 0; i < tblOrderPlacement.getItems().size(); i++) {
             CartTm tm = obList.get(i);
-            OrderDetails od = new OrderDetails(
+            OrderDetailsDTO od = new OrderDetailsDTO(
                     tm.getI_ID(),
                     orderID,
                     tm.getQty(),
@@ -352,10 +361,10 @@ public class OrderPlacementFormController {
 
         }
 
-        Payment payment = new Payment(paymentID,PayMethod,Amount, date);
-        PlaceOrder po = new PlaceOrder(order, odList, payment);
+        PaymentDTO payment = new PaymentDTO(paymentID,PayMethod,Amount, date);
+        PlaceOrderDTO po = new PlaceOrderDTO(order, odList, payment);
 
-        boolean isPlaced = PlaceOrderDAOImpl.placeOrder(po);
+        boolean isPlaced = placeOrderBO.placeOrder(po);
         if (isPlaced) {
             btnPrintBillOnAction(null);
             obList.clear();
@@ -388,7 +397,7 @@ public class OrderPlacementFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> telList = EmployeeDAOImpl.getTel();
+            List<String> telList = employeeBO.getTel();
 
             for(String tel : telList) {
                 obList.add(tel);
@@ -404,7 +413,7 @@ public class OrderPlacementFormController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<String> idList = ItemDAOImpl.getIds();
+            List<String> idList = itemBO.getCodes();
 
             for(String id : idList) {
                 obList.add(id);
@@ -420,7 +429,7 @@ public class OrderPlacementFormController {
     void comEmployeeTelOnAction(ActionEvent event) {
         String tel = comEmployeeTel.getValue();
         try {
-            Employee employee = EmployeeDAOImpl.searchByTel(tel);
+            Employee employee = employeeBO.searchByTel(tel);
 
             lblEmployeeName.setText(employee.getName());
             lblEmployeeId.setText(employee.getEmployeeId());
@@ -445,7 +454,7 @@ public class OrderPlacementFormController {
     void comItemIdOnAction(ActionEvent event) {
         String id = String.valueOf(comItemId.getValue());
         try {
-            Item item = ItemDAOImpl.searchById(id);
+            Item item = itemBO.searchById(id);
 
             if (item != null) {
                 lblItemDescription.setText(item.getDescription());
