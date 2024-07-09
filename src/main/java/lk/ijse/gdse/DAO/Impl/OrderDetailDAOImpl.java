@@ -1,5 +1,6 @@
 package lk.ijse.gdse.DAO.Impl;
 
+import lk.ijse.gdse.DAO.SQLUtil;
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.Entity.OrderDetails;
 
@@ -19,7 +20,7 @@ public class OrderDetailDAOImpl {
     }
 
     private static boolean saveOrderDetail(OrderDetails od) throws SQLException {
-        String sql = "INSERT INTO orderDetails (itemId, orderId, qty, unitPrice) VALUES (?, ?, ?, ?)";
+        /*String sql = "INSERT INTO orderDetails (itemId, orderId, qty, unitPrice) VALUES (?, ?, ?, ?)";
 
         PreparedStatement pstm = DbConnection.getInstance().getConnection()
                 .prepareStatement(sql);
@@ -29,7 +30,8 @@ public class OrderDetailDAOImpl {
         pstm.setInt(3, od.getQty());
         pstm.setDouble(4, od.getUnitPrice());
 
-        return pstm.executeUpdate() > 0;
+        return pstm.executeUpdate() > 0;*/
+        return SQLUtil.execute("INSERT INTO orderDetails (itemId, orderId, qty, unitPrice) VALUES (?, ?, ?, ?)",od.getItemId(),od.getOrderId(),od.getQty(),od.getUnitPrice());
     }
 
 }

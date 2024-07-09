@@ -13,7 +13,7 @@ public class OrderDetailsBOImpl implements OrderDetailsBO {
     OrderDetailDAO orderDetailDAO = (OrderDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER_DETAILS);
     @Override
     public boolean save(List<OrderDetails> odList) throws SQLException {
-        return orderDetailDAO.save(new lk.ijse.gdse.Entity.OrderDetails());
+        return orderDetailDAO.save(new OrderDetails());
     }
 
     @Override
