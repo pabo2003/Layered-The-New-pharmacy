@@ -8,6 +8,8 @@ import lk.ijse.gdse.DAO.Impl.OrderDetailDAOImpl;
 import lk.ijse.gdse.DAO.Impl.PaymentDAOImpl;
 import lk.ijse.gdse.DB.DbConnection;
 import lk.ijse.gdse.DTO.PlaceOrderDTO;
+import lk.ijse.gdse.Entity.OrderDetails;
+import lk.ijse.gdse.Entity.PlaceOrder;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,7 +20,7 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     ItemDAO itemDAO = (ItemDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ITEM);
     OrderDetailDAO orderDetailDAO = (OrderDetailDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.ORDER_DETAILS);
     @Override
-    public boolean placeOrder(PlaceOrderDTO po) throws SQLException {
+    public boolean placeOrder(PlaceOrder po) throws SQLException {
             Connection connection = DbConnection.getInstance().getConnection();
             connection.setAutoCommit(false);
 
@@ -29,9 +31,8 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
                     if (isOrderSaved) {
                         boolean isQtyUpdated = itemDAO.update1(po.getOdList());
                         if (isQtyUpdated) {
-                            boolean isOrderDetailSaved = orderDetailDAO.save(po.getOdList());
+                            boolean isOrderDetailSaved = orderDetailDAO.save((OrderDetails) po.getOdList());
                             if (isOrderDetailSaved) {
-
                                 connection.commit();
                                 return true;
                             }

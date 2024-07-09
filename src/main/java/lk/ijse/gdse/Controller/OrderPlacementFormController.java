@@ -344,12 +344,12 @@ public class OrderPlacementFormController {
         String PayMethod = "Cash";
 
 
-        OrderDTO order = new OrderDTO(orderID,desc,Amount,date,customerID,paymentID,EmployeeID);
-        List<OrderDetailsDTO> odList = new ArrayList<>();
+        Order order = new Order(orderID,desc,Amount,date,customerID,paymentID,EmployeeID);
+        List<OrderDetails> odList = new ArrayList<>();
 
         for (int i = 0; i < tblOrderPlacement.getItems().size(); i++) {
             CartTm tm = obList.get(i);
-            OrderDetailsDTO od = new OrderDetailsDTO(
+            OrderDetails od = new OrderDetails(
                     tm.getI_ID(),
                     orderID,
                     tm.getQty(),
@@ -361,8 +361,8 @@ public class OrderPlacementFormController {
 
         }
 
-        PaymentDTO payment = new PaymentDTO(paymentID,PayMethod,Amount, date);
-        PlaceOrderDTO po = new PlaceOrderDTO(order, odList, payment);
+        Payment payment = new Payment(paymentID,PayMethod,Amount, date);
+        PlaceOrder po = new PlaceOrder(order, odList, payment);
 
         boolean isPlaced = placeOrderBO.placeOrder(po);
         if (isPlaced) {

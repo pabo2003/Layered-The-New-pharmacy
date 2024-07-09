@@ -45,7 +45,7 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public Item searchById(String id) throws SQLException {
-        return itemDAO.SearchById(id);
+        return itemDAO.searchByTel(id);
     }
 
     @Override
