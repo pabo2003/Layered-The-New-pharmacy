@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import lk.ijse.gdse.BO.BOFactory;
 import lk.ijse.gdse.BO.ItemBO;
+import lk.ijse.gdse.BO.StockBO;
 import lk.ijse.gdse.DTO.ItemDTO;
 import lk.ijse.gdse.Util.Regex;
 import lk.ijse.gdse.Entity.Item;
@@ -79,9 +80,10 @@ public class ItemFormController {
     @FXML
     private TextField txtUnitPrice;
     ItemBO itemBO  = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ITEM);
+    StockBO stockBO  = (StockBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.STOCK);
 
     @FXML
-    private void initialize() {
+    private void initialize() throws SQLException {
         setCellValueFactory();
         loadAllItems();
         getStockIds();
@@ -144,15 +146,25 @@ public class ItemFormController {
         colStockId.setCellValueFactory(new PropertyValueFactory<>("stockId"));
     }
 
-    private void loadAllItems() {
+    private void loadAllItems() throws SQLException {
         ObservableList<Item> obList = FXCollections.observableArrayList();
-        try {
+        /*try {
             List<ItemDTO> itemList = itemBO.getAllItem();
-            obList.addAll(itemList);
+            obList.addAll((Item) itemList);
             tblItem.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }*/
+    try {
+        List<ItemDTO> itemList = itemBO.getAllItem();
+        for (ItemDTO item : itemList) {
+            Item item1 = new Item(item.getItemId(), item.getDescription(), item.getUnitPrice(), item.getQtyOnHand(), item.getStockId());
+            obList.add(item1);
         }
+        tblItem.setItems(obList);
+    }catch (SQLException e){
+        throw new RuntimeException(e);
+    }
     }
 
     @FXML
@@ -194,7 +206,7 @@ public class ItemFormController {
 
 
     @FXML
-    void btnSaveOnAction(ActionEvent event) {
+    void btnSaveOnAction(ActionEvent event) throws SQLException {
         String itemId = txtCode.getText();
         String description = txtDescription.getText();
         int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
@@ -203,7 +215,7 @@ public class ItemFormController {
 
         try {
             if (isValied()) {
-                boolean isSaved = itemBO.saveItem(new Item(itemId, description, unitPrice, qtyOnHand, stockId));
+                boolean isSaved = itemBO.saveItem(new ItemDTO(itemId, description, unitPrice, qtyOnHand, stockId));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "ItemDTO saved successfully!").show();
                     clearFields();
@@ -219,7 +231,7 @@ public class ItemFormController {
     }
 
     @FXML
-    void btnUpdateOnAction(ActionEvent event) {
+    void btnUpdateOnAction(ActionEvent event) throws SQLException {
         String stockId = comStockId.getValue();
         String itemId = txtCode.getText();
         String description = txtDescription.getText();
@@ -243,7 +255,7 @@ public class ItemFormController {
     void comStockIdOnAction(ActionEvent event) {
         String id = comStockId.getValue();
         try {
-            Stock stock = StockDAOImpl.searchById(id);
+            Stock stock = stockBO.searchById(id);
         } catch (SQLException e) {
             showAlert(Alert.AlertType.ERROR, "Error occurred while searching for stock: " + e.getMessage());
         }
@@ -252,7 +264,7 @@ public class ItemFormController {
     private void getStockIds() {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<String> idList = StockDAOImpl.getId();
+            List<String> idList = stockBO.getId();
             obList.addAll(idList);
             comStockId.setItems(obList);
         } catch (SQLException e) {

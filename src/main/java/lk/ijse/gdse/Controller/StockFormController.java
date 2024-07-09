@@ -16,6 +16,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.gdse.BO.BOFactory;
+import lk.ijse.gdse.BO.ItemBO;
+import lk.ijse.gdse.BO.StockBO;
+import lk.ijse.gdse.DTO.StockDTO;
 import lk.ijse.gdse.Util.Regex;
 import lk.ijse.gdse.Entity.Stock;
 import lk.ijse.gdse.DAO.Impl.StockDAOImpl;
@@ -64,11 +68,12 @@ public class StockFormController {
 
     @FXML
     private TextField txtId;
+    StockBO stockBO  = (StockBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.STOCK);
 
     public void txtSearchOnAction(ActionEvent actionEvent) throws SQLException {
         String id = txtId.getText();
 
-        Stock stock = StockDAOImpl.searchById(id);
+        Stock stock = stockBO.searchById(id);
 
         if (stock != null) {
             txtId.setText(stock.getStockId());
@@ -110,7 +115,7 @@ public class StockFormController {
 
     private void getCurrentStockId() {
         try {
-            String currentId = StockDAOImpl.getCurrentId();
+            String currentId = stockBO.getCurrentId();
             String nextOrderId = generateNextStockId(currentId);
             txtId.setText(nextOrderId);
 
@@ -130,8 +135,8 @@ public class StockFormController {
     private void loadAllStock() {
         ObservableList<Stock> objList = FXCollections.observableArrayList();
         try {
-            List<Stock> stockList = StockDAOImpl.getAll();
-            for (Stock stock : stockList) {
+            List<StockDTO> stockList = stockBO.getAllStock();
+            for (StockDTO stock : stockList) {
                 Stock stock1 = new Stock(
                         stock.getStockId(),
                         stock.getDescription(),
@@ -174,7 +179,7 @@ public class StockFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = StockDAOImpl.delete(id);
+            boolean isDeleted = stockBO.deleteStock(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION,"StockDTO Deleted!");
             }
@@ -192,7 +197,7 @@ public class StockFormController {
 
         try {
             if (isValied()) {
-                boolean isSaved = StockDAOImpl.save(new Stock(id, description, category));
+                boolean isSaved = stockBO.saveStock(new StockDTO(id, description, category));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "StockDTO saved successfully!").show();
                     clearFields();
@@ -221,7 +226,7 @@ public class StockFormController {
         Stock stock = new Stock(id, description, category);
 
         try {
-            boolean isUpdate = StockDAOImpl.update(stock);
+            boolean isUpdate = stockBO.updateStock(stock);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION, "StockDTO is updated!").show();
             }

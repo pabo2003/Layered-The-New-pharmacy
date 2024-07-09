@@ -17,6 +17,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.gdse.BO.BOFactory;
+import lk.ijse.gdse.BO.StockBO;
+import lk.ijse.gdse.BO.SupplierBO;
+import lk.ijse.gdse.DTO.SupplierDTO;
 import lk.ijse.gdse.Util.Regex;
 import lk.ijse.gdse.Entity.Supplier;
 import lk.ijse.gdse.DAO.Impl.SupplierDAOImpl;
@@ -77,11 +81,12 @@ public class SupplierFormController {
 
     @FXML
     private TextField txtTel;
+    SupplierBO supplierBO  = (SupplierBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.SUPPLIER);
 
     public void txtSearchOnAction(ActionEvent actionEvent) throws SQLException {
         String id = txtId.getText();
 
-        Supplier supplier = SupplierDAOImpl.searchById(id);
+        Supplier supplier = supplierBO.searchById(id);
 
         if (supplier != null) {
             txtId.setText(supplier.getSupplierId());
@@ -137,7 +142,7 @@ public class SupplierFormController {
 
     private void getCurrentCustomerId() {
         try {
-            String currentId = SupplierDAOImpl.getCurrentId();
+            String currentId = supplierBO.getCurrentId();
             String nextOrderId = generateNextOrderId(currentId);
             txtId.setText(nextOrderId);
 
@@ -157,8 +162,8 @@ public class SupplierFormController {
     private void loadAllSuppliers() {
         ObservableList<Supplier> objList = FXCollections.observableArrayList();
         try {
-            List<Supplier> supplierList = SupplierDAOImpl.getAll();
-            for (Supplier supplier : supplierList) {
+            List<SupplierDTO> supplierList = supplierBO.getAllSupplier();
+            for (SupplierDTO supplier : supplierList) {
                 Supplier supplier1 = new Supplier(
                         supplier.getSupplierId(),
                         supplier.getName(),
@@ -212,7 +217,7 @@ public class SupplierFormController {
         String id = txtId.getText();
 
         try {
-            boolean isDeleted = SupplierDAOImpl.delete(id);
+            boolean isDeleted = supplierBO.deleteSupplier(id);
             if (isDeleted) {
                 new Alert(Alert.AlertType.CONFIRMATION,"SupplierDTO Deleted!");
             }
@@ -232,7 +237,7 @@ public class SupplierFormController {
 
         try {
             if (isValied()) {
-                boolean isSaved = SupplierDAOImpl.save(new Supplier(id, name, description, address, tel));
+                boolean isSaved = supplierBO.saveSupplier(new Supplier(id, name, description, address, tel));
                 if (isSaved) {
                     new Alert(Alert.AlertType.CONFIRMATION, "SupplierDTO saved successfully!").show();
                     clearFields();
@@ -258,7 +263,7 @@ public class SupplierFormController {
         Supplier supplier = new Supplier(id,name,description,address,tel);
 
         try {
-            boolean isUpdate = SupplierDAOImpl.update(supplier);
+            boolean isUpdate = supplierBO.updateSupplier(supplier);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION,"SupplierDTO is updated!").show();
             }

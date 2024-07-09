@@ -14,7 +14,7 @@ public interface StockBO extends SuperBO{
 
     public boolean deleteStock(String id) throws SQLException;
 
-    public boolean updateStock(StockDTO stock) throws SQLException;
+    public boolean updateStock(Stock stock) throws SQLException;
 
     public Stock searchById(String id) throws SQLException;
 
