@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import lk.ijse.gdse.BO.BOFactory;
 import lk.ijse.gdse.BO.ItemBO;
 import lk.ijse.gdse.BO.StockBO;
+import lk.ijse.gdse.DAO.StockDAO;
 import lk.ijse.gdse.DTO.StockDTO;
 import lk.ijse.gdse.Util.Regex;
 import lk.ijse.gdse.Entity.Stock;
@@ -187,6 +188,7 @@ public class StockFormController {
             new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
         }
         loadAllStock();
+        clearFields();
     }
 
     @FXML
@@ -223,10 +225,10 @@ public class StockFormController {
         String description = txtDescription.getText();
         String category = txtCategory.getText();
 
-        Stock stock = new Stock(id, description, category);
+        StockDTO stockDTO = new StockDTO(id, description, category);
 
         try {
-            boolean isUpdate = stockBO.updateStock(stock);
+            boolean isUpdate = stockBO.updateStock(stockDTO);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION, "StockDTO is updated!").show();
             }

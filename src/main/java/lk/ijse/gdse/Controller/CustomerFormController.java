@@ -194,10 +194,10 @@ public class CustomerFormController {
         String address = txtAddress.getText();
         String tel = txtTel.getText();
 
-        Customer customer = new Customer(id,name,nicNo,address,tel);
+        CustomerDTO customerDTO = new CustomerDTO(id,name,nicNo,address,tel);
 
         try {
-            boolean isUpdate = customerBO.updateCustomer(customer);
+            boolean isUpdate = customerBO.updateCustomer(customerDTO);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION,"CustomerDTO is updated!").show();
             }

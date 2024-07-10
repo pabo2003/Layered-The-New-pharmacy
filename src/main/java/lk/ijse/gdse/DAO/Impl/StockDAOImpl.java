@@ -102,8 +102,10 @@ public class StockDAOImpl implements StockDAO {
         }
         return null;*/
         ResultSet rst = SQLUtil.execute("SELECT*FROM stock WHERE stockId = ?",id +"");
-        rst.next();
-        return new Stock(rst.getString(1),rst.getString(2),rst.getString(3));
+        if (rst.next()) {
+            return new Stock(rst.getString(1), rst.getString(2), rst.getString(3));
+        }
+        return null;
     }
 
     public List<String> getTel() throws SQLException {

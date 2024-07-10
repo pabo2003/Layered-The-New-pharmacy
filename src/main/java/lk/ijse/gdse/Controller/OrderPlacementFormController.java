@@ -132,8 +132,6 @@ public class OrderPlacementFormController {
     CustomerBO customerBO  = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.CUSTOMER);
     EmployeeBO employeeBO = (EmployeeBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.EMPLOYEE);
     ItemBO itemBO  = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ITEM);
-    OrderBO orderBO  = (OrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ORDER);
-    OrderDetailsBO orderDetailsBO  = (OrderDetailsBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ORDER_DETAILS);
     PaymentBO paymentBO  = (PaymentBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.PAYMENT);
     PlaceOrderBO placeOrderBO  = (PlaceOrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.PLACE_ORDER);
     public void initialize() {
@@ -214,7 +212,7 @@ public class OrderPlacementFormController {
     private void getCurrentOrderId() {
 
         try {
-            String currentId = orderBO.getCurrentId();
+            String currentId = placeOrderBO.getCurrentId();
             String nextOrderId = generateNextOrderId(currentId);
             lblOrderId.setText(nextOrderId);
 

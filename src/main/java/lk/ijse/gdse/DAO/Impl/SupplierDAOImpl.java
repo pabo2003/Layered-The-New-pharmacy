@@ -108,9 +108,11 @@ public class SupplierDAOImpl implements SupplierDAO {
             return supplier;
         }
         return null;*/
-        ResultSet rst = SQLUtil.execute("SELECT*FROM supplier WHERE supplierId = ?",id +"");
-        rst.next();
-        return new Supplier(rst.getString(1),rst.getString(2),rst.getString(3),rst.getString(4),rst.getString(5) );
+        ResultSet rst = SQLUtil.execute("SELECT*FROM supplier WHERE supplierId = ?", id + "");
+        if (rst.next()) {
+            return new Supplier(rst.getString(1), rst.getString(2), rst.getString(3), rst.getString(4), rst.getString(5));
+        }
+        return null;
     }
 
     public List<String> getTel() throws SQLException {

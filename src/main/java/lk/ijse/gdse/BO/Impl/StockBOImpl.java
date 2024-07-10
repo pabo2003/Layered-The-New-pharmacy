@@ -33,8 +33,8 @@ public class StockBOImpl implements StockBO {
     }
 
     @Override
-    public boolean updateStock(Stock stock) throws SQLException {
-        return stockDAO.update(new Stock(stock.getStockId(),stock.getDescription(),stock.getCategory()));
+    public boolean updateStock(StockDTO stockDTO) throws SQLException {
+        return stockDAO.update(new Stock(stockDTO.getStockId(),stockDTO.getDescription(),stockDTO.getCategory()));
     }
 
     @Override

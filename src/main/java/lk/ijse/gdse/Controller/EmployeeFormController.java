@@ -16,11 +16,13 @@ import javafx.stage.Stage;
 import lk.ijse.gdse.BO.BOFactory;
 import lk.ijse.gdse.BO.EmployeeBO;
 import lk.ijse.gdse.DTO.EmployeeDTO;
+import lk.ijse.gdse.Entity.Item;
 import lk.ijse.gdse.Util.Regex;
 import lk.ijse.gdse.Entity.Employee;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeFormController {
@@ -194,11 +196,27 @@ public class EmployeeFormController {
             txtTel.setText(employee.getTel());
             txtSalary.setText(String.valueOf(employee.getSalary()));
         } else {
-            new Alert(Alert.AlertType.INFORMATION, "CustomerDTO is not found!");
+            new Alert(Alert.AlertType.INFORMATION, "EmployeeDTO is not found!");
         }
     }
 
     public void btnDeleteOnAction(ActionEvent actionEvent) {
+        /*ObservableList<Employee> selectedRows = tblEmployee.getSelectionModel().getSelectedItems();
+        List<Employee> employeeToDelete = new ArrayList<>(selectedRows);
+        try {
+            for (Employee employee : employeeToDelete) {
+                boolean isDeleted = employeeBO.deleteEmployee(employee.getEmployeeId());
+                if (isDeleted) {
+                    tblEmployee.getItems().remove(employee);
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Failed to delete employee: " + employee.getEmployeeId());
+                }
+            }
+            showAlert(Alert.AlertType.CONFIRMATION, "Employees deleted successfully!");
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Error occurred while deleting items: " + e.getMessage());
+        }
+        loadAllEmployee();*/
         String id = txtId.getText();
 
         try {
@@ -210,6 +228,13 @@ public class EmployeeFormController {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
         loadAllEmployee();
+        clearFields();
+    }
+
+    private void showAlert(Alert.AlertType alertType, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public void btnClearOnAction(ActionEvent actionEvent) {
@@ -270,10 +295,10 @@ public class EmployeeFormController {
         String tel = txtTel.getText();
         double salary = Double.parseDouble(txtSalary.getText());
 
-        Employee employee = new Employee(id, name, nicNo, address, tel, salary);
+        EmployeeDTO employeeDTO = new EmployeeDTO(id, name, nicNo, address, tel, salary);
 
         try {
-            boolean isUpdate = employeeBO.updateEmployee(employee);
+            boolean isUpdate = employeeBO.updateEmployee(employeeDTO);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION, "EmployeeDTO is updated!").show();
             }

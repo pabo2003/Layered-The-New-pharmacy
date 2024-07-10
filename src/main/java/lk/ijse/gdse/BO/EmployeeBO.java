@@ -13,7 +13,7 @@ public interface EmployeeBO extends SuperBO{
 
     public boolean deleteEmployee(String id) throws SQLException;
 
-    public boolean updateEmployee(Employee employee) throws SQLException;
+    public boolean updateEmployee(EmployeeDTO employeeDTO) throws SQLException;
 
     public Employee searchByTel(String tel) throws SQLException;
 

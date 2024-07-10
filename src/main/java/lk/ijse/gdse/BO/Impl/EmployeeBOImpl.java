@@ -29,8 +29,8 @@ public class EmployeeBOImpl implements EmployeeBO {
         return employeeDAO.delete(id);
     }
 
-    public boolean updateEmployee(Employee employee) throws SQLException {
-        return employeeDAO.update(new Employee(employee.getEmployeeId(), employee.getName(), employee.getNICNo(), employee.getAddress(), employee.getTel(), employee.getSalary()));
+    public boolean updateEmployee(EmployeeDTO employeeDTO) throws SQLException {
+        return employeeDAO.update(new Employee(employeeDTO.getEmployeeId(), employeeDTO.getName(), employeeDTO.getNICNo(), employeeDTO.getAddress(), employeeDTO.getTel(), employeeDTO.getSalary()));
     }
 
     public Employee searchByTel(String tel) throws SQLException {

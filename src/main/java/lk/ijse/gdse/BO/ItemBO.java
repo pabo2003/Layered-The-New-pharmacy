@@ -8,15 +8,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ItemBO extends SuperBO {
-    public boolean saveItem(ItemDTO item) throws SQLException;
-
+    public boolean saveItem(ItemDTO itemDTO) throws SQLException;
 
     public List<ItemDTO> getAllItem() throws SQLException;
 
 
     public boolean deleteItem(String id) throws SQLException;
 
-    public boolean updateItem(Item item) throws SQLException;
+    public boolean updateItem(ItemDTO itemDTO) throws SQLException;
 
     public List<String> getCodes() throws SQLException;
 

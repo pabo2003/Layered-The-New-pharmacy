@@ -225,6 +225,7 @@ public class SupplierFormController {
             new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
         }
         loadAllSuppliers();
+        clearFields();
     }
 
     @FXML
@@ -260,10 +261,10 @@ public class SupplierFormController {
         String address = txtAddress.getText();
         String tel = txtTel.getText();
 
-        Supplier supplier = new Supplier(id,name,description,address,tel);
+        SupplierDTO supplierDTO = new SupplierDTO(id,name,description,address,tel);
 
         try {
-            boolean isUpdate = supplierBO.updateSupplier(supplier);
+            boolean isUpdate = supplierBO.updateSupplier(supplierDTO);
             if (isUpdate) {
                 new Alert(Alert.AlertType.CONFIRMATION,"SupplierDTO is updated!").show();
             }

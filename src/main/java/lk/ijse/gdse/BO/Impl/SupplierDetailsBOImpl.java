@@ -15,12 +15,12 @@ import java.util.List;
 public class SupplierDetailsBOImpl implements SupplierDetailsBO {
     SupplierDetailsDAO supplierDetailsDAO = (SupplierDetailsDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOTypes.SUPPLIER_DETAILS);
     @Override
-    public boolean save(List<SupplierDetails> odList) throws SQLException {
+    public boolean save(List<SupplierDetailsDTO> odList) throws SQLException {
         return false;
     }
 
     @Override
-    public boolean saveSupplierDetails(SupplierDetails od) throws SQLException {
+    public boolean saveSupplierDetails(SupplierDetailsDTO od) throws SQLException {
         return supplierDetailsDAO.save(new SupplierDetails(od.getSupplierId(), od.getStockId(), od.getDate()));
     }
 

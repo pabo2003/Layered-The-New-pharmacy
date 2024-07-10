@@ -1,4 +1,3 @@
-/*
 package lk.ijse.gdse.Controller;
 
 import com.jfoenix.controls.JFXButton;
@@ -172,11 +171,11 @@ public class SupplierDetailsFormController {
     }
 
     public void loadAllSupplierDetails() {
-        ObservableList<SupplierDetails> obList = FXCollections.observableArrayList();
+        ObservableList<SupplierDetailsDTO> obList = FXCollections.observableArrayList();
         try {
-            List<SupplierDetails> supplierDetailsList = SupplierDetailsBO.getAllSuppliers();
-            for (SupplierDetails supplierDetails : supplierDetailsList) {
-                SupplierDetails supplierDetails1 = new SupplierDetails();
+            List<SupplierDetailsDTO> supplierDetailsList = supplierDetailsBO.getAllSuppliers();
+            for (SupplierDetailsDTO supplierDetails : supplierDetailsList) {
+                SupplierDetailsDTO supplierDetails1 = new SupplierDetailsDTO();
                 supplierDetails1.setStockId(supplierDetails.getStockId());
                 supplierDetails1.setSupplierId(supplierDetails.getSupplierId());
                 supplierDetails1.setDate(supplierDetails.getDate());
@@ -212,10 +211,10 @@ public class SupplierDetailsFormController {
             return;
         }
 
-        SupplierDetails supplierDetails = new SupplierDetails(stockId, supplierId, date);
+        SupplierDetailsDTO supplierDetails = new SupplierDetailsDTO(stockId, supplierId, date);
 
         try {
-            boolean isSaved = supplierDetailsBO.save(List.of(supplierDetails));
+            boolean isSaved = supplierDetailsBO.saveSupplierDetails(supplierDetails);
             if (isSaved) {
                 new Alert(Alert.AlertType.CONFIRMATION, "SupplierDTO Details saved successfully!").show();
                 clearFields();
@@ -278,4 +277,4 @@ public class SupplierDetailsFormController {
         root.getChildren().clear();
         root.getChildren().add(rootNode);
     }
-}*/
+}

@@ -29,8 +29,8 @@ public class CustomerBOImpl implements CustomerBO {
         return customerDAO.delete(id);
     }
 
-    public boolean updateCustomer(Customer customer) throws SQLException {
-        return customerDAO.update(new Customer(customer.getCuId(),customer.getName(),customer.getNicNo(), customer.getAddress(), customer.getTel()));
+    public boolean updateCustomer(CustomerDTO customerDTO) throws SQLException {
+        return customerDAO.update(new Customer(customerDTO.getCuId(),customerDTO.getName(),customerDTO.getNicNo(), customerDTO.getAddress(), customerDTO.getTel()));
     }
 
     public Customer searchByTel(String tel) throws SQLException {

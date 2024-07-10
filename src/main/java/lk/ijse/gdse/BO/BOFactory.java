@@ -23,10 +23,6 @@ public class BOFactory {
                 return new EmployeeBOImpl();
             case ITEM:
                 return new ItemBOImpl();
-            case ORDER:
-                return new OrderBOImpl();
-            case ORDER_DETAILS:
-                return new OrderDetailsBOImpl();
             case PAYMENT:
                 return new PaymentBOImpl();
             case PLACE_ORDER:

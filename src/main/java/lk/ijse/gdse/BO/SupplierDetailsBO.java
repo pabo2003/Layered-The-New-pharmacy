@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface SupplierDetailsBO extends SuperBO{
-    public boolean save(List<SupplierDetails> odList) throws SQLException;
+    public boolean save(List<SupplierDetailsDTO> odList) throws SQLException;
 
-    public boolean saveSupplierDetails(SupplierDetails od) throws SQLException;
+    public boolean saveSupplierDetails(SupplierDetailsDTO od) throws SQLException;
 
     public List<SupplierDetailsDTO> getAllSuppliers() throws SQLException;
 }

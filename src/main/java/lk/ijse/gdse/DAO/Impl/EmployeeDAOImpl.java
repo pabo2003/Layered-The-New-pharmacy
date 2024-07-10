@@ -80,15 +80,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         /*String sql = "UPDATE Employee SET name = ? , nicNo = ? , address = ? , tel = ? , salary = ? WHERE employeeId = ?";
         PreparedStatement pstm = DbConnection.getInstance().getConnection().prepareStatement(sql);
 
-        pstm.setObject(1,employee.getName());
-        pstm.setObject(2,employee.getNICNo());
-        pstm.setObject(3,employee.getAddress());
-        pstm.setObject(4,employee.getTel());
-        pstm.setObject(5,employee.getSalary());
-        pstm.setObject(6,employee.getEmployeeId());
+                                                                                                                                            pstm.setObject(1,employee.getName());
+                                                                                                                                            pstm.setObject(2,employee.getNICNo());
+                                                                                                                                            pstm.setObject(3,employee.getAddress());
+                                                                                                                                            pstm.setObject(4,employee.getTel());
+                                                                                                                                            pstm.setObject(5,employee.getSalary());
+                                                                                                                                            pstm.setObject(6,employee.getEmployeeId());
 
         return pstm.executeUpdate() > 0;*/
-        return SQLUtil.execute("UPDATE Employee SET name = ? , nicNo = ? , address = ? , tel = ? , salary = ? WHERE employeeId = ?",employee.getEmployeeId(),employee.getName(),employee.getNICNo(),employee.getAddress(),employee.getTel(),employee.getSalary());
+        return SQLUtil.execute("UPDATE Employee SET name = ? , nicNo = ? , address = ? , tel = ? , salary = ? WHERE employeeId = ?",employee.getName(),employee.getNICNo(),employee.getAddress(),employee.getTel(),employee.getSalary(),employee.getEmployeeId());
     }
 
     @Override
@@ -112,9 +112,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             return employee;
         }
         return null;*/
-        ResultSet rst = SQLUtil.execute("SELECT * FROM Employee WHERE tel = ?",tel +"");
-        rst.next();
-        return new Employee(rst.getString("1"), rst.getString(2), rst.getString(3),rst.getString(4), rst.getString(5),rst.getDouble(6));
+        ResultSet rst = SQLUtil.execute("SELECT * FROM Employee WHERE tel = ?", tel + "");
+        if (rst.next()) {
+            return new Employee(rst.getString(1), rst.getString(2), rst.getString(3), rst.getString(4), rst.getString(5), rst.getDouble(6));
+        }
+        return null;
     }
 
     @Override

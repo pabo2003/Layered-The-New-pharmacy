@@ -36,8 +36,8 @@ public class SupplierBOImpl implements SupplierBO {
     }
 
     @Override
-    public boolean updateSupplier(Supplier supplier) throws SQLException {
-        return supplierDAO.update(new Supplier(supplier.getSupplierId(), supplier.getName(), supplier.getDescription(), supplier.getAddress(), supplier.getTel()));
+    public boolean updateSupplier(SupplierDTO supplierDTO) throws SQLException {
+        return supplierDAO.update(new Supplier(supplierDTO.getSupplierId(), supplierDTO.getName(), supplierDTO.getDescription(), supplierDTO.getAddress(), supplierDTO.getTel()));
     }
 
     @Override

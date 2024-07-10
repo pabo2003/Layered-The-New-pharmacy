@@ -13,7 +13,7 @@ public interface CustomerBO extends SuperBO{
 
     public boolean deleteCustomer(String id) throws SQLException;
 
-    public boolean updateCustomer(Customer customer) throws SQLException;
+    public boolean updateCustomer(CustomerDTO customerDTO) throws SQLException;
 
     public Customer searchByTel(String tel) throws SQLException;
 

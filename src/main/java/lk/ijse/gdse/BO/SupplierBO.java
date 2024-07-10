@@ -17,7 +17,7 @@ public interface SupplierBO extends SuperBO {
 
     public boolean deleteSupplier(String id) throws SQLException;
 
-    public boolean updateSupplier(Supplier supplier) throws SQLException;
+    public boolean updateSupplier(SupplierDTO supplierDTO) throws SQLException;
 
     public Supplier searchById(String id) throws SQLException;
 

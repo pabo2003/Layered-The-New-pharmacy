@@ -186,22 +186,19 @@ public class ItemFormController {
     }
 
     @FXML
-    void btnDeleteOnAction(ActionEvent event) {
-        ObservableList<Item> selectedRows = tblItem.getSelectionModel().getSelectedItems();
-        List<Item> itemsToDelete = new ArrayList<>(selectedRows);
+    void btnDeleteOnAction(ActionEvent event) throws SQLException {
+        String id = txtCode.getText();
+
         try {
-            for (Item item : itemsToDelete) {
-                boolean isDeleted = itemBO.deleteItem(item.getItemId());
-                if (isDeleted) {
-                    tblItem.getItems().remove(item);
-                } else {
-                    showAlert(Alert.AlertType.ERROR, "Failed to delete item: " + item.getItemId());
-                }
+            boolean isDeleted = itemBO.deleteItem(id);
+            if (isDeleted) {
+                new Alert(Alert.AlertType.CONFIRMATION, "ItemDTO Deleted!");
             }
-            showAlert(Alert.AlertType.CONFIRMATION, "Items deleted successfully!");
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Error occurred while deleting items: " + e.getMessage());
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+        loadAllItems();
+        clearFields();
     }
 
 
@@ -238,9 +235,9 @@ public class ItemFormController {
         double unitPrice = Double.parseDouble(txtUnitPrice.getText());
         int qtyOnHand = Integer.parseInt(txtQtyOnHand.getText());
 
-        Item item = new Item(itemId, description, unitPrice, qtyOnHand, stockId);
+        ItemDTO itemDTO = new ItemDTO(itemId, description, unitPrice, qtyOnHand, stockId);
         try {
-            boolean isUpdate = itemBO.updateItem(item);
+            boolean isUpdate = itemBO.updateItem(itemDTO);
             if (isUpdate) {
                 showAlert(Alert.AlertType.CONFIRMATION, "ItemDTO is updated!");
             }
