@@ -22,7 +22,11 @@ public class PaymentDAOImpl implements PaymentDAO {
         pstm.setObject(4, payment.getDate());
 
         return pstm.executeUpdate() > 0;*/
-        return SQLUtil.execute("INSERT INTO payment VALUES(?,?,?,?)",payment.getPayId(),payment.getMethod(),payment.getAmount(),payment.getDate());
+        return SQLUtil.execute("INSERT INTO payment VALUES(?,?,?,?)",
+                payment.getPayId(),
+                payment.getMethod(),
+                payment.getAmount(),
+                payment.getDate());
     }
 
     public ArrayList<Payment> getAll() throws SQLException {
