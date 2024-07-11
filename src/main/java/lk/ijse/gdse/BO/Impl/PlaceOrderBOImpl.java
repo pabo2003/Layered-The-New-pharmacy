@@ -49,14 +49,23 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
         Connection connection = DbConnection.getInstance().getConnection();
         connection.setAutoCommit(false);
 
-        try {
-            boolean isPayUpdated = paymentDAO.save(po.getPayment());
+        try{
+        PlaceOrderDTO po1 = new PlaceOrderDTO(po.getOrder(), po.getOdList(), po.getPayment());
+        PlaceOrder placeOrder = new PlaceOrder(po1);
+
+        PaymentDAO paymentDAO = new PaymentDAOImpl();
+        OrderDAO orderDAO = new OrderDAOImpl();
+        ItemDAO itemDAO = new ItemDAOImpl();
+        OrderDetailDAO orderDetailDAO = new OrderDetailDAOImpl();
+
+        /*try {
+            boolean isPayUpdated = paymentDAO.save(placeOrder.getPayment());
             if (isPayUpdated) {
-                boolean isOrderSaved = orderDAO.save(po.getOrder());
+                boolean isOrderSaved = orderDAO.save(placeOrder.getOrder());
                 if (isOrderSaved) {
-                    boolean isQtyUpdated = itemDAO.update1(po.getOdList());
+                    boolean isQtyUpdated = itemDAO.update1(placeOrder.getOdList());
                     if (isQtyUpdated) {
-                        boolean isOrderDetailSaved = orderDetailDAO.saveOrderDetails(po.getOdList());
+                        boolean isOrderDetailSaved = orderDetailDAO.saveOrderDetails(placeOrder.getOdList());
                         if (isOrderDetailSaved) {
 
                             connection.commit();
@@ -72,6 +81,34 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
             return false;
         } finally {
             connection.setAutoCommit(true);
+        }*/
+        boolean isPayUpdated = paymentDAO.save(placeOrder.getPayment());
+        boolean isOrderSaved = orderDAO.save(placeOrder.getOrder());
+        boolean isQtyUpdated = itemDAO.update1(placeOrder.getOdList());
+        boolean isOrderDetailSaved = orderDetailDAO.saveOrderDetails(placeOrder.getOdList());
+
+        if (isPayUpdated && isOrderSaved && isQtyUpdated && isOrderDetailSaved) {
+            connection.commit();
+            return true;
+        } else {
+            connection.rollback();
+            return false;
         }
+    } catch (SQLException e) {
+        connection.rollback();
+        e.printStackTrace();
+        return false;
+    } catch (Exception e) {
+        connection.rollback();
+        e.printStackTrace();
+        return false;
+    } finally {
+        try {
+            connection.setAutoCommit(true);
+            connection.close();
+        } catch (SQLException closeException) {
+            closeException.printStackTrace();
+        }
+    }
     }
 }

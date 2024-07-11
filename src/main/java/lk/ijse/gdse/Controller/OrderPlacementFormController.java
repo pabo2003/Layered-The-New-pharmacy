@@ -355,15 +355,13 @@ public class OrderPlacementFormController {
                     tm.getUnitPrice()
 
             );
-
             odList.add(od);
-
         }
 
         PaymentDTO paymentDTO = new PaymentDTO(paymentID,PayMethod,Amount, date);
         PlaceOrderDTO po = new PlaceOrderDTO(orderDTO, odList, paymentDTO);
 
-        boolean isPlaced = placeOrderBO.placeOrder(po);
+        /*boolean isPlaced = placeOrderBO.placeOrder(po);
         if (isPlaced) {
             btnPrintBillOnAction(null);
             obList.clear();
@@ -374,21 +372,23 @@ public class OrderPlacementFormController {
             new Alert(Alert.AlertType.CONFIRMATION, "OrderDTO Placed!").show();
         } else {
             new Alert(Alert.AlertType.WARNING, "OrderDTO Placed Unsuccessfully!").show();
-        }
-        /*try {
-            boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
-                    tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(orderId, tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
+        }*/
+        try {
+            boolean isPlaced = placeOrderBO.placeOrder(po);
+            if (isPlaced) {
+                btnPrintBillOnAction(null);
+                obList.clear();
+                txtQty.clear();
+                placeOrderBO.getCurrentId();
+                paymentBO.getCurrentId();
 
-            if (b) {
-                new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
+                new Alert(Alert.AlertType.CONFIRMATION, "Order Placed!").show();
             } else {
-                new Alert(Alert.AlertType.ERROR, "Order has not been placed successfully").show();
+                new Alert(Alert.AlertType.WARNING, "Order Placed Unsuccessfully!").show();
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        } catch (ClassNotFoundException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
-        }*/
+        }
     }
     private void getCustomerTels() {
         ObservableList<String> obList = FXCollections.observableArrayList();
@@ -513,7 +513,7 @@ public class OrderPlacementFormController {
 
 
     public void btnPrintBillOnAction(ActionEvent actionEvent) throws JRException, SQLException {
-        JasperDesign jasperDesign = JRXmlLoader.load("src/main/resources/resources/Report/PlaceOrderDTO.jrxml");
+        JasperDesign jasperDesign = JRXmlLoader.load("src/main/resources/resources/Report/PlaceOrder.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
         Map<String,Object> data = new HashMap<>();

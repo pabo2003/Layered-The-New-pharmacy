@@ -133,10 +133,11 @@ public class PaymentDAOImpl implements PaymentDAO {
         }
         return null;*/
         ResultSet rst = SQLUtil.execute("SELECT payId FROM payment ORDER BY payId DESC LIMIT 1");
-        if(rst.next()) {
+        if (rst.next()) {
             String payId = rst.getString(1);
             return payId;
+        } else {
+            return null;
         }
-        return null;
     }
 }
