@@ -7,6 +7,8 @@ import lk.ijse.gdse.DAO.Impl.OrderDAOImpl;
 import lk.ijse.gdse.DAO.Impl.OrderDetailDAOImpl;
 import lk.ijse.gdse.DAO.Impl.PaymentDAOImpl;
 import lk.ijse.gdse.DB.DbConnection;
+import lk.ijse.gdse.DTO.OrderDTO;
+import lk.ijse.gdse.DTO.OrderDetailsDTO;
 import lk.ijse.gdse.DTO.PlaceOrderDTO;
 import lk.ijse.gdse.Entity.Order;
 import lk.ijse.gdse.Entity.OrderDetails;
@@ -28,47 +30,48 @@ public class PlaceOrderBOImpl implements PlaceOrderBO {
     }
 
     @Override
-    public boolean saveOrder(Order order) throws SQLException {
+    public boolean saveOrder(OrderDTO order) throws SQLException {
         return orderDAO.save(new Order(order.getOrderId(), order.getDescription(), order.getPaymentAmount(), order.getDate(), order.getCuId(), order.getPayId(), order.getEmployeeId()));
     }
 
     @Override
-    public boolean save(List<OrderDetails> odList) throws SQLException {
+    public boolean save(List<OrderDetailsDTO> odList) throws SQLException {
         return false;
     }
 
     @Override
-    public boolean saveOrderDetail(OrderDetails od) throws SQLException {
+    public boolean saveOrderDetail(OrderDetailsDTO od) throws SQLException {
         return orderDetailDAO.save(new OrderDetails(od.getItemId(),od.getOrderId(),od.getQty(),od.getUnitPrice()));
     }
 
     @Override
-    public boolean placeOrder(PlaceOrder po) throws SQLException {
-            Connection connection = DbConnection.getInstance().getConnection();
-            connection.setAutoCommit(false);
+    public boolean placeOrder(PlaceOrderDTO po) throws SQLException {
+        Connection connection = DbConnection.getInstance().getConnection();
+        connection.setAutoCommit(false);
 
-            try {
-                boolean isPayUpdated = paymentDAO.save(po.getPayment());
-                if (isPayUpdated) {
-                    boolean isOrderSaved = orderDAO.save(po.getOrder());
-                    if (isOrderSaved) {
-                        boolean isQtyUpdated = itemDAO.update1(po.getOdList());
-                        if (isQtyUpdated) {
-                            boolean isOrderDetailSaved = orderDetailDAO.save((OrderDetails) po.getOdList());
-                            if (isOrderDetailSaved) {
-                                connection.commit();
-                                return true;
-                            }
+        try {
+            boolean isPayUpdated = paymentDAO.save(po.getPayment());
+            if (isPayUpdated) {
+                boolean isOrderSaved = orderDAO.save(po.getOrder());
+                if (isOrderSaved) {
+                    boolean isQtyUpdated = itemDAO.update1(po.getOdList());
+                    if (isQtyUpdated) {
+                        boolean isOrderDetailSaved = orderDetailDAO.saveOrderDetails(po.getOdList());
+                        if (isOrderDetailSaved) {
+
+                            connection.commit();
+                            return true;
                         }
                     }
                 }
-                connection.rollback();
-                return false;
-            } catch (Exception e) {
-                connection.rollback();
-                return false;
-            } finally {
-                connection.setAutoCommit(true);
             }
+            connection.rollback();
+            return false;
+        } catch (Exception e) {
+            connection.rollback();
+            return false;
+        } finally {
+            connection.setAutoCommit(true);
+        }
     }
 }

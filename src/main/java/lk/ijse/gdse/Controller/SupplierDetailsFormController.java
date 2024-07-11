@@ -248,7 +248,11 @@ public class SupplierDetailsFormController {
         String id = (String) comStockId.getValue();
         try {
             Stock stock = stockBO.searchById(id);
-            lblStockDescription.setText(stock.getDescription());
+            if (stock == null) {
+                lblStockDescription.setText("Supplier not Found");
+            } else {
+                lblStockDescription.setText(stock.getDescription());
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -259,7 +263,11 @@ public class SupplierDetailsFormController {
         String id = comSupplierId.getValue();
         try {
             Supplier supplier = supplierBO.searchById(id);
-            lblSupplierName.setText(supplier.getName());
+            if (supplier == null) {
+                lblSupplierName.setText("Supplier not Found");
+            } else {
+                lblSupplierName.setText(supplier.getName());
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

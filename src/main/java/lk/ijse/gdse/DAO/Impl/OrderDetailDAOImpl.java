@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderDetailDAOImpl implements OrderDetailDAO {
-    public static boolean saveOrderDetails(List<OrderDetails> odList) throws SQLException {
+    public boolean saveOrderDetails(List<OrderDetails> odList) throws SQLException {
         for (OrderDetails od : odList) {
             boolean isSaved = saveOrderDetails((List<OrderDetails>) od);
             if(!isSaved) {

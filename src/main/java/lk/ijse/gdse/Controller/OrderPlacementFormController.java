@@ -34,6 +34,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class OrderPlacementFormController {
 
@@ -342,12 +343,12 @@ public class OrderPlacementFormController {
         String PayMethod = "Cash";
 
 
-        Order order = new Order(orderID,desc,Amount,date,customerID,paymentID,EmployeeID);
-        List<OrderDetails> odList = new ArrayList<>();
+        OrderDTO orderDTO = new OrderDTO(orderID,desc,Amount,date,customerID,paymentID,EmployeeID);
+        List<OrderDetailsDTO> odList = new ArrayList<>();
 
         for (int i = 0; i < tblOrderPlacement.getItems().size(); i++) {
             CartTm tm = obList.get(i);
-            OrderDetails od = new OrderDetails(
+            OrderDetailsDTO od = new OrderDetailsDTO(
                     tm.getI_ID(),
                     orderID,
                     tm.getQty(),
@@ -359,21 +360,35 @@ public class OrderPlacementFormController {
 
         }
 
-        Payment payment = new Payment(paymentID,PayMethod,Amount, date);
-        PlaceOrder po = new PlaceOrder(order, odList, payment);
+        PaymentDTO paymentDTO = new PaymentDTO(paymentID,PayMethod,Amount, date);
+        PlaceOrderDTO po = new PlaceOrderDTO(orderDTO, odList, paymentDTO);
 
         boolean isPlaced = placeOrderBO.placeOrder(po);
         if (isPlaced) {
             btnPrintBillOnAction(null);
             obList.clear();
             txtQty.clear();
-            getCurrentOrderId();
-            getCurrentPayId();
+            placeOrderBO.getCurrentId();
+            paymentBO.getCurrentId();
 
             new Alert(Alert.AlertType.CONFIRMATION, "OrderDTO Placed!").show();
         } else {
             new Alert(Alert.AlertType.WARNING, "OrderDTO Placed Unsuccessfully!").show();
         }
+        /*try {
+            boolean b = saveOrder(orderId, LocalDate.now(), cmbCustomerId.getValue(),
+                    tblOrderDetails.getItems().stream().map(tm -> new OrderDetailDTO(orderId, tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
+
+            if (b) {
+                new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Order has not been placed successfully").show();
+            }
+        } catch (SQLException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        }*/
     }
     private void getCustomerTels() {
         ObservableList<String> obList = FXCollections.observableArrayList();
