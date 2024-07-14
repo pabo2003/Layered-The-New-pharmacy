@@ -22,10 +22,10 @@ public class ItemBOImpl implements ItemBO {
     public ArrayList<ItemDTO> getAllItem() throws SQLException {
         ArrayList<Item> all = itemDAO.getAll();
         List<ItemDTO> allItem = new ArrayList<>();
-    for (Item item : all){
-        allItem.add(new ItemDTO(item.getItemId(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand(),item.getStockId()));
-    }
-    return (ArrayList<ItemDTO>) allItem;
+        for (Item item : all){
+            allItem.add(new ItemDTO(item.getItemId(),item.getDescription(),item.getUnitPrice(),item.getQtyOnHand(),item.getStockId()));
+        }
+        return (ArrayList<ItemDTO>) allItem;
     }
 
     @Override
@@ -50,7 +50,13 @@ public class ItemBOImpl implements ItemBO {
 
     @Override
     public boolean update1(List<OrderDetailsDTO> odList) throws SQLException {
-        return false;
+        for (OrderDetailsDTO od : odList) {
+            boolean isUpdateQty = updateQty(od.getItemId(), od.getQty());
+            if(!isUpdateQty) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

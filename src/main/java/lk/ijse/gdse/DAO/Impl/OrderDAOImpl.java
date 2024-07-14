@@ -27,12 +27,11 @@ public class OrderDAOImpl implements OrderDAO {
         }
         return null;*/
         ResultSet rst = SQLUtil.execute("SELECT orderId FROM orders ORDER BY orderId DESC LIMIT 1");
-        if (rst.next()) {
+        if(rst.next()) {
             String orderId = rst.getString(1);
             return orderId;
-        } else {
-            return null;
         }
+        return null;
     }
 
     public boolean save(OrderDTO order) throws SQLException {
@@ -51,8 +50,8 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public boolean save(Order entity) throws SQLException {
-        return false;
+    public boolean save(Order order) throws SQLException {
+        return SQLUtil.execute("INSERT INTO orders VALUES(?, ?, ?,?,?,?,?)",order.getOrderId(),order.getDescription(),order.getPaymentAmount(),order.getDate(),order.getCuId(),order.getPayId(),order.getEmployeeId());
     }
 
     @Override

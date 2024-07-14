@@ -319,7 +319,7 @@ public class OrderPlacementFormController {
     }
 
     @FXML
-     void btnDashBoardOnAction(ActionEvent event) {
+    void btnDashBoardOnAction(ActionEvent event) {
         try {
             AnchorPane rootNode = FXMLLoader.load(getClass().getResource("/resources/view/dashboard_form.fxml"));
             Stage stage = (Stage) root.getScene().getWindow();
@@ -343,7 +343,7 @@ public class OrderPlacementFormController {
         String PayMethod = "Cash";
 
 
-        OrderDTO orderDTO = new OrderDTO(orderID,desc,Amount,date,customerID,paymentID,EmployeeID);
+        OrderDTO order = new OrderDTO(orderID,desc,Amount,date,customerID,paymentID,EmployeeID);
         List<OrderDetailsDTO> odList = new ArrayList<>();
 
         for (int i = 0; i < tblOrderPlacement.getItems().size(); i++) {
@@ -355,39 +355,31 @@ public class OrderPlacementFormController {
                     tm.getUnitPrice()
 
             );
+
             odList.add(od);
+
         }
 
-        PaymentDTO paymentDTO = new PaymentDTO(paymentID,PayMethod,Amount, date);
-        PlaceOrderDTO po = new PlaceOrderDTO(orderDTO, odList, paymentDTO);
+        PaymentDTO payment = new PaymentDTO(paymentID,PayMethod,Amount, date);
+        PlaceOrderDTO po = new PlaceOrderDTO(order, odList, payment);
+        /*paymentBO.savePayment(payment);
+        orderBO.saveOrder(order);
+        itemBO.update1(odList);
+        orderDetailsBO.save(odList);*/
 
-        /*boolean isPlaced = placeOrderBO.placeOrder(po);
+        boolean isPlaced = placeOrderBO.placeOrder(po);
         if (isPlaced) {
-            btnPrintBillOnAction(null);
+            System.out.println("Transfer is done");
+            // btnPrintBillOnAction(null);
             obList.clear();
             txtQty.clear();
-            placeOrderBO.getCurrentId();
-            paymentBO.getCurrentId();
+            getCurrentOrderId();
+            getCurrentPayId();
 
             new Alert(Alert.AlertType.CONFIRMATION, "OrderDTO Placed!").show();
         } else {
-            new Alert(Alert.AlertType.WARNING, "OrderDTO Placed Unsuccessfully!").show();
-        }*/
-        try {
-            boolean isPlaced = placeOrderBO.placeOrder(po);
-            if (isPlaced) {
-                btnPrintBillOnAction(null);
-                obList.clear();
-                txtQty.clear();
-                placeOrderBO.getCurrentId();
-                paymentBO.getCurrentId();
 
-                new Alert(Alert.AlertType.CONFIRMATION, "Order Placed!").show();
-            } else {
-                new Alert(Alert.AlertType.WARNING, "Order Placed Unsuccessfully!").show();
-            }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            new Alert(Alert.AlertType.WARNING, "OrderDTO Placed Unsuccessfully!").show();
         }
     }
     private void getCustomerTels() {
@@ -513,7 +505,7 @@ public class OrderPlacementFormController {
 
 
     public void btnPrintBillOnAction(ActionEvent actionEvent) throws JRException, SQLException {
-        JasperDesign jasperDesign = JRXmlLoader.load("src/main/resources/resources/Report/PlaceOrder.jrxml");
+        JasperDesign jasperDesign = JRXmlLoader.load("src/main/resources/resources/Report/PlaceOrderDTO.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
         Map<String,Object> data = new HashMap<>();
